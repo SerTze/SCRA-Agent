@@ -1,0 +1,42 @@
+# SCRA – Docker Compose
+#
+# Usage:
+#   docker compose up --build          # build & start
+#   docker compose up -d               # detached mode
+#   docker compose logs -f scra        # tail logs
+#   docker compose down                # stop & remove
+#
+# After startup, ingest the corpus:
+#   curl -X POST http://localhost:8000/ingest
+#
+# Then query:
+#   curl -X POST http://localhost:8000/query \
+#     -H "Content-Type: application/json" \
+#     -d '{"question": "What AI practices are prohibited under Article 5?"}'
+
+services:
+  scra:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scra-agent
+    ports:
+      - "${SCRA_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      - CHROMA_PERSIST_DIR=/app/chroma_data
+      - LOG_FORMAT=json
+    volumes:
+      - chroma_data:/app/chroma_data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  chroma_data:
+    driver: local

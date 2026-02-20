@@ -1,0 +1,523 @@
+[
+  {
+    "id": "eval_001",
+    "question": "Is social scoring allowed under the EU AI Act?",
+    "expected_answer_contains": [
+      "prohibited",
+      "Article 5"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art5",
+    "topic": "prohibited_practices",
+    "difficulty": "easy",
+    "expected_sources": [
+      "EUAI_Art5",
+      "EUAI_Rec31",
+      "EUAI_Rec63"
+    ]
+  },
+  {
+    "id": "eval_002",
+    "question": "What AI practices are explicitly prohibited under Article 5?",
+    "expected_answer_contains": [
+      "subliminal",
+      "social scoring",
+      "prohibited"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art5",
+    "topic": "prohibited_practices",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_Art5",
+      "EUAI_Rec28"
+    ]
+  },
+  {
+    "id": "eval_003",
+    "question": "What are the requirements for high-risk AI systems?",
+    "expected_answer_contains": [
+      "high-risk",
+      "risk management",
+      "Annex"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "high_risk",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_Art14",
+      "EUAI_Art15",
+      "EUAI_Art9",
+      "EUAI_Rec26",
+      "EUAI_Rec52",
+      "EUAI_Rec66",
+      "EUAI_Rec68",
+      "EUAI_Rec75"
+    ]
+  },
+  {
+    "id": "eval_004",
+    "question": "What transparency obligations apply to AI systems that interact with humans?",
+    "expected_answer_contains": [
+      "transparency",
+      "inform",
+      "interact"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "transparency",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_Art13",
+      "EUAI_Art50",
+      "EUAI_Rec132",
+      "EUAI_Rec137",
+      "EUAI_Rec72"
+    ]
+  },
+  {
+    "id": "eval_005",
+    "question": "What are the penalties for non-compliance with the EU AI Act?",
+    "expected_answer_contains": [
+      "fine",
+      "penalty",
+      "million",
+      "EUR"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "enforcement",
+    "difficulty": "easy",
+    "expected_sources": [
+      "EUAI_Art100",
+      "EUAI_Art101",
+      "EUAI_Art99",
+      "EUAI_Rec169",
+      "EUAI_Rec68"
+    ]
+  },
+  {
+    "id": "eval_006",
+    "question": "How does the EU AI Act define an AI system?",
+    "expected_answer_contains": [
+      "AI system",
+      "machine-based",
+      "definition"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "definitions",
+    "difficulty": "easy",
+    "expected_sources": [
+      "EUAI_Art3",
+      "EUAI_Rec1"
+    ]
+  },
+  {
+    "id": "eval_007",
+    "question": "What role does the European AI Office play under the regulation?",
+    "expected_answer_contains": [
+      "AI Office",
+      "supervision",
+      "Commission"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_",
+    "topic": "governance",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_Art88",
+      "EUAI_Rec148",
+      "EUAI_Rec47"
+    ]
+  },
+  {
+    "id": "eval_008",
+    "question": "Are biometric identification systems regulated under the AI Act?",
+    "expected_answer_contains": [
+      "biometric",
+      "identification",
+      "prohibited",
+      "high-risk"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "biometrics",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_AnnexIII",
+      "EUAI_Art26",
+      "EUAI_Art5",
+      "EUAI_Rec14",
+      "EUAI_Rec15",
+      "EUAI_Rec17",
+      "EUAI_Rec32",
+      "EUAI_Rec35",
+      "EUAI_Rec38",
+      "EUAI_Rec39",
+      "EUAI_Rec40",
+      "EUAI_Rec41",
+      "EUAI_Rec54",
+      "EUAI_Rec68",
+      "EUAI_Rec94",
+      "EUAI_Rec95"
+    ]
+  },
+  {
+    "id": "eval_009",
+    "question": "What obligations do providers of general-purpose AI models have?",
+    "expected_answer_contains": [
+      "general-purpose",
+      "provider",
+      "transparency"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_",
+    "topic": "gpai",
+    "difficulty": "hard",
+    "expected_sources": [
+      "EUAI_Art53",
+      "EUAI_Art89",
+      "EUAI_Rec101",
+      "EUAI_Rec109",
+      "EUAI_Rec68",
+      "EUAI_Rec85",
+      "EUAI_Rec97"
+    ]
+  },
+  {
+    "id": "eval_010",
+    "question": "When does the EU AI Act enter into force and what is the timeline for implementation?",
+    "expected_answer_contains": [
+      "2024",
+      "force",
+      "month"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "timeline",
+    "difficulty": "easy",
+    "expected_sources": [
+      "EUAI_Art113",
+      "EUAI_Rec179"
+    ]
+  },
+  {
+    "id": "eval_011",
+    "question": "Does the EU AI Act regulate AI systems used for credit scoring?",
+    "expected_answer_contains": [
+      "high-risk",
+      "Annex III",
+      "credit"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Annex",
+    "topic": "high_risk",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_AnnexIII",
+      "EUAI_Art6",
+      "EUAI_Rec1",
+      "EUAI_Rec131",
+      "EUAI_Rec85"
+    ]
+  },
+  {
+    "id": "eval_012",
+    "question": "Compare the obligations of providers versus deployers of high-risk AI systems.",
+    "expected_answer_contains": [
+      "provider",
+      "deployer",
+      "obligation"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "high_risk",
+    "difficulty": "hard",
+    "expected_sources": [
+      "EUAI_Art16",
+      "EUAI_Art25",
+      "EUAI_Art26",
+      "EUAI_Rec68",
+      "EUAI_Rec91"
+    ]
+  },
+  {
+    "id": "eval_013",
+    "question": "What does GDPR say about the right to erasure?",
+    "expected_answer_contains": [
+      "not covered",
+      "outside scope",
+      "GDPR",
+      "EU AI Act"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "",
+    "topic": "out_of_scope",
+    "difficulty": "easy",
+    "expected_sources": []
+  },
+  {
+    "id": "eval_014",
+    "question": "Is facial recognition always prohibited under the EU AI Act?",
+    "expected_answer_contains": [
+      "biometric",
+      "exception",
+      "law enforcement"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art5",
+    "topic": "biometrics",
+    "difficulty": "hard",
+    "expected_sources": [
+      "EUAI_Art5",
+      "EUAI_Art50",
+      "EUAI_Rec38",
+      "EUAI_Rec39",
+      "EUAI_Rec43",
+      "EUAI_Rec54",
+      "EUAI_Rec94"
+    ]
+  },
+  {
+    "id": "eval_015",
+    "question": "What documentation and technical requirements must providers of high-risk AI systems maintain?",
+    "expected_answer_contains": [
+      "technical documentation",
+      "risk management",
+      "Article"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "high_risk",
+    "difficulty": "hard",
+    "expected_sources": [
+      "EUAI_Art16",
+      "EUAI_Art17",
+      "EUAI_Art21",
+      "EUAI_Art8",
+      "EUAI_Rec65",
+      "EUAI_Rec66",
+      "EUAI_Rec71"
+    ]
+  },
+  {
+    "id": "eval_016",
+    "question": "What are the data governance requirements for high-risk AI systems under the EU AI Act?",
+    "expected_answer_contains": [
+      "data",
+      "training",
+      "bias",
+      "quality"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art10",
+    "topic": "high_risk",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_Art10",
+      "EUAI_Art16",
+      "EUAI_Rec10",
+      "EUAI_Rec122",
+      "EUAI_Rec66",
+      "EUAI_Rec67"
+    ]
+  },
+  {
+    "id": "eval_017",
+    "question": "What is a regulatory sandbox under the EU AI Act and who can participate?",
+    "expected_answer_contains": [
+      "sandbox",
+      "controlled",
+      "authority"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "governance",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_Art57",
+      "EUAI_Art58",
+      "EUAI_Rec139",
+      "EUAI_Rec55",
+      "EUAI_Rec68"
+    ]
+  },
+  {
+    "id": "eval_018",
+    "question": "How does the EU AI Act classify AI systems by risk level?",
+    "expected_answer_contains": [
+      "unacceptable",
+      "high-risk",
+      "limited",
+      "minimal"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "risk_classification",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_Art16",
+      "EUAI_Art49",
+      "EUAI_Art6",
+      "EUAI_Rec26",
+      "EUAI_Rec51",
+      "EUAI_Rec52",
+      "EUAI_Rec7"
+    ]
+  },
+  {
+    "id": "eval_019",
+    "question": "What systemic risk obligations apply to general-purpose AI models with high impact?",
+    "expected_answer_contains": [
+      "systemic risk",
+      "general-purpose",
+      "evaluation"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "gpai",
+    "difficulty": "hard",
+    "expected_sources": [
+      "EUAI_Art51",
+      "EUAI_Art52",
+      "EUAI_Art55",
+      "EUAI_Art93",
+      "EUAI_Rec110",
+      "EUAI_Rec111",
+      "EUAI_Rec112",
+      "EUAI_Rec114",
+      "EUAI_Rec65",
+      "EUAI_Rec97"
+    ]
+  },
+  {
+    "id": "eval_020",
+    "question": "Can AI systems be used in recruitment and hiring under the EU AI Act?",
+    "expected_answer_contains": [
+      "high-risk",
+      "employment",
+      "recruitment",
+      "Annex"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Annex",
+    "topic": "high_risk",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_AnnexIII",
+      "EUAI_Art49",
+      "EUAI_Art6",
+      "EUAI_Rec1",
+      "EUAI_Rec29",
+      "EUAI_Rec4"
+    ]
+  },
+  {
+    "id": "eval_021",
+    "question": "What are the human oversight requirements for high-risk AI systems?",
+    "expected_answer_contains": [
+      "human oversight",
+      "understand",
+      "intervene"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art14",
+    "topic": "high_risk",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_Art14",
+      "EUAI_Art26",
+      "EUAI_Rec68",
+      "EUAI_Rec73"
+    ]
+  },
+  {
+    "id": "eval_022",
+    "question": "How does the EU AI Act address emotion recognition systems?",
+    "expected_answer_contains": [
+      "emotion recognition",
+      "prohibit",
+      "workplace"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "prohibited_practices",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_Art5",
+      "EUAI_Art50",
+      "EUAI_Rec18",
+      "EUAI_Rec39",
+      "EUAI_Rec44",
+      "EUAI_Rec63",
+      "EUAI_Rec68"
+    ]
+  },
+  {
+    "id": "eval_023",
+    "question": "What conformity assessment procedures must high-risk AI systems undergo?",
+    "expected_answer_contains": [
+      "conformity assessment",
+      "CE",
+      "notified body"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "high_risk",
+    "difficulty": "hard",
+    "expected_sources": [
+      "EUAI_AnnexVI",
+      "EUAI_Art17",
+      "EUAI_Art43",
+      "EUAI_Rec123",
+      "EUAI_Rec125",
+      "EUAI_Rec173",
+      "EUAI_Rec20",
+      "EUAI_Rec68"
+    ]
+  },
+  {
+    "id": "eval_024",
+    "question": "What is the role of national competent authorities under the EU AI Act?",
+    "expected_answer_contains": [
+      "national",
+      "authority",
+      "market surveillance"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art",
+    "topic": "governance",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_Art3",
+      "EUAI_Art57",
+      "EUAI_Art65",
+      "EUAI_Art70",
+      "EUAI_Rec48",
+      "EUAI_Rec68"
+    ]
+  },
+  {
+    "id": "eval_025",
+    "question": "Does the EU AI Act apply to AI systems developed outside the European Union?",
+    "expected_answer_contains": [
+      "third country",
+      "market",
+      "Union",
+      "scope"
+    ],
+    "expected_source_type": "primary_legal",
+    "expected_citation_pattern": "EUAI_Art2",
+    "topic": "scope",
+    "difficulty": "medium",
+    "expected_sources": [
+      "EUAI_Art2",
+      "EUAI_Rec1",
+      "EUAI_Rec180",
+      "EUAI_Rec3",
+      "EUAI_Rec7"
+    ]
+  }
+]

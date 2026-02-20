@@ -1,0 +1,23 @@
+[project]
+name = "scra"
+version = "4.0.0"
+description = "Self-Correcting Regulatory Agent – compliance-aware Q&A for the EU AI Act"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+readme = "README.md"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]
+ignore = ["E501"]
