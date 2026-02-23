@@ -20,6 +20,7 @@ A compliance-aware regulatory Q&A agent with a self-auditing loop, engineered wi
 12. [Data Sources](#data-sources)
 13. [Stack](#stack)
 14. [Known Limitations](#known-limitations)
+15. [Lessons Learned](#lessons-learned)
 
 ---
 
@@ -154,10 +155,17 @@ All settings are loaded from environment variables or a `.env` file. See [.env.e
 | `RATE_LIMIT_BURST` | `10` | Token bucket burst size |
 | `CACHE_MAX_SIZE` | `128` | Maximum number of cached query results |
 | `CACHE_TTL_SECONDS` | `300` | Cache entry time-to-live (seconds) |
+| `TOP_K_SIBLINGS` | `2` | Sibling chunks to expand per retrieved chunk (context window) |
+| `CACHE_SIMILARITY_THRESHOLD` | `0.92` | Cosine similarity threshold for semantic cache hits |
 | `OTEL_SERVICE_NAME` | `scra-agent` | OpenTelemetry service name |
 | `OTEL_EXPORTER_ENDPOINT` | _(empty)_ | OTLP gRPC endpoint (e.g. `http://localhost:4317`) |
 | `LOG_FORMAT` | `text` | Log format: `text` (human) or `json` (structured) |
 | `LOG_LEVEL` | `INFO` | Log level: `DEBUG`, `INFO`, `WARNING`, `ERROR` |
+| `LOG_FILE` | _(empty)_ | Optional path for a rotating log file (e.g. `logs/scra.log`) |
+| `LANGFUSE_ENABLED` | `false` | Enable Langfuse LLM tracing (set to `true` with keys below) |
+| `LANGFUSE_PUBLIC_KEY` | _(empty)_ | Langfuse project public key |
+| `LANGFUSE_SECRET_KEY` | _(empty)_ | Langfuse project secret key |
+| `LANGFUSE_HOST` | `https://cloud.langfuse.com` | Langfuse host URL |
 
 ---
 
@@ -327,6 +335,28 @@ All FastAPI endpoints are automatically instrumented. Traces include:
 - HTTP request spans (method, path, status code, latency)
 - Internal spans from the LangGraph workflow nodes
 
+### Langfuse LLM Tracing (Optional)
+
+[Langfuse](https://langfuse.com) provides per-call LLM tracing with token counts, latencies, and full prompt/completion visibility for every LangGraph node execution.
+
+**To enable:**
+
+```bash
+# .env
+LANGFUSE_ENABLED=true
+LANGFUSE_PUBLIC_KEY=pk-lf-...
+LANGFUSE_SECRET_KEY=sk-lf-...
+# LANGFUSE_HOST=https://cloud.langfuse.com  # default; override for self-hosted
+```
+
+When enabled, every `ainvoke` call on the compiled workflow automatically records a full trace in the Langfuse dashboard. Install the package if not already present:
+
+```bash
+pip install langfuse
+```
+
+When `LANGFUSE_ENABLED=false` (the default) or keys are missing, the feature is silently skipped — no errors, no performance impact.
+
 ---
 
 ## Testing
@@ -358,6 +388,7 @@ pytest tests/ -v --cov=src --cov-report=term-missing
 | `test_chunking.py` | 19 | Fixed-size + paragraph splitting, metadata prepend, edge cases |
 | `test_rate_limit.py` | 7 | Token bucket, TTL eviction, interval guard |
 | `test_eval_scoring.py` | 14 | Evaluation metric scoring (relevance, citations, sources) |
+| `test_infrastructure.py` | — | Unit tests for infrastructure adapters (Groq, OpenAI, Cohere, Chroma, Tavily) |
 | `test_integration.py` | 3 | Live smoke tests (Groq, Cohere, Tavily) — **skipped without API keys** |
 
 ### Integration Tests
@@ -374,7 +405,7 @@ These make real API calls to Groq/OpenAI, Cohere, and Tavily and are skipped by 
 
 ## Evaluation Harness
 
-The evaluation harness scores the agent's answers against a curated golden dataset of 20+ EU AI Act questions. It requires a **running server**.
+The evaluation harness scores the agent's answers against a curated golden dataset of 25 EU AI Act questions. It requires a **running server**.
 
 ### Running an Evaluation
 
@@ -411,6 +442,45 @@ Each question is scored on:
 
 Aggregate metrics: `pass_rate`, `mean_relevance`, `grounding_rate`, `compliance_rate`, `citation_rate`, `fallback_rate`, `mean_latency`.
 
+### Benchmark Results
+
+> **Note on "accuracy":** The eval harness does not implement binary correct/incorrect scoring. The closest proxy is `answer_relevance` — the fraction of expected keywords found in the answer (range 0–1). All runs used the default `fixed_2000` chunking strategy. No end-to-end accuracy comparison across chunking strategies was measured; see the retrieval-only benchmark below for quality differences between chunk configs.
+
+#### Model comparison — end-to-end eval (Feb 2026, chunking: `fixed_2000`)
+
+| Metric | Groq / Maverick _(n=10)_ | OpenAI `gpt-4o-mini` _(n=25)_ |
+|---|---|---|
+| **Answer relevance** _(accuracy proxy)_ | 59% | **69%** |
+| Pass rate | 70% | **72%** |
+| Grounding rate | **100%** | 96% |
+| Compliance rate | **100%** | 96% |
+| Citation validity | **90%** | 88% |
+| Citation source accuracy | **70%** | 56% |
+| Web fallback rate | **0%** | 20% |
+| p50 latency | 41,087 ms | **9,604 ms** |
+| p95 latency | 126,666 ms | **66,090 ms** |
+| p50 latency (no-fallback) | 41,087 ms | **8,135 ms** |
+| p95 latency (no-fallback) | 126,666 ms | **44,381 ms** |
+
+**Takeaways:**
+- **OpenAI `gpt-4o-mini` wins on answer relevance (69% vs 59%) and is ~5× faster** (p50 8 s vs 41 s). The higher p50 on Groq/Maverick reflects that model's slower token generation throughput, not retry depth — Maverick had 0% fallback rate, so no retries occurred. The self-correction loop compounds this: each retry adds another full LLM round-trip + Cohere rerank. Single-pass queries cluster at 6–13 s; the gap widens when retries kick in.
+- **Groq/Maverick wins on citation source accuracy (70% vs 56%)** — it more reliably cites the expected article/recital, which matters for legal Q&A.
+- Grounding and compliance are perfect for Groq/Maverick vs. 96% for OpenAI, but the Groq sample is smaller (10 vs 25 questions).
+- The Groq run filename is labelled `maverick`; the model field was not captured in the result file (likely `llama-3.3-70b-versatile` or a preview model — see `GROQ_MODEL` in your `.env`).
+- The `LATENCY_BUDGET_SECONDS` middleware default is intentionally set above the single-pass p50 to let the self-correction loop complete on most queries; lower it for latency-sensitive deployments where a partial answer beats a timeout.
+
+#### Retrieval-only benchmark — 8 chunking configs, 25-question test set, embeddings: `all-MiniLM-L6-v2` via ChromaDB (Feb 2026)
+
+| Config | Split mode | Max chars | recall@5 | recall@10 | recall@25 | hit@1 |
+|---|---|---|---|---|---|---|
+| **fixed_2000** _(winner)_ | fixed | 2000 | **41.8%** | **61.6%** | **82.6%** | **100%** |
+| para_2000 | paragraph | 2000 | 41.8% | 61.6% | 82.6% | 100% |
+| fixed_1200 | fixed | 1200 | 39.8% | 57.7% | 81.9% | 95.8% |
+| para_1200 | paragraph | 1200 | 39.8% | 57.1% | 81.0% | 95.8% |
+| fixed_800 | fixed | 800 | 36.5% | 51.8% | 76.8% | 87.5% |
+
+> `para_2000` ties `fixed_2000` across all retrieval metrics — EU AI Act article boundaries align naturally with ~2000-char paragraph splits. Smaller chunks (≤1200 chars) degrade quality for both split modes. Note: latency is not affected by chunking strategy — it is driven entirely by LLM and reranker round-trips.
+
 ### Comparing Runs
 
 ```bash
@@ -446,6 +516,7 @@ src/
 │   ├── protocols.py # LLMPort, RetrieverPort, RerankerPort, WebSearchPort, VectorStorePort
 │   └── exceptions.py
 ├── application/     # Business logic (depends only on domain)
+│   ├── workflow.py  # LangGraph self-correcting agent loop
 │   ├── prompts.py   # Central prompt templates
 │   ├── cache.py     # LRU response cache with TTL + semantic similarity
 │   └── services/
@@ -462,9 +533,7 @@ src/
 │   ├── chroma_adapter.py    # ChromaDB (RetrieverPort + VectorStorePort)
 │   ├── tavily_adapter.py    # Tavily web search (WebSearchPort)
 │   ├── ingestion.py         # EUR-Lex HTML → EvidenceChunk pipeline
-│   └── telemetry.py         # OpenTelemetry + structured logging setup
-├── application/
-│   └── workflow.py    # LangGraph self-correcting agent loop
+│   └── telemetry.py         # OpenTelemetry + Langfuse + structured logging
 ├── presentation/
 │   ├── api.py         # FastAPI endpoints + cache + background ingestion
 │   ├── middleware.py  # Latency budget ASGI middleware
@@ -488,13 +557,40 @@ src/
 
 ## Workflow
 
+```mermaid
+flowchart TD
+    A([START]) --> B[retrieve]
+    B --> C[generate]
+    C --> D["grade\n(grounding + compliance\nconcurrently)"]
+
+    D -->|"grounded/partial\n+ compliant"| E([END])
+    D -->|"no cited_sources\nfallback unused"| F[web_fallback]
+    D -->|"stall or evidence\ninsufficient, fallback unused"| F
+    D -->|"hallucinated or\nnon-compliant, budget left"| G[refine]
+    D -->|"budget exhausted\nfallback unused"| F
+    D -->|"budget exhausted\nfallback used"| H[best_answer]
+    D -->|"no usable answer"| I[error]
+
+    G --> D
+    F -->|"rewrites query"| B
+    H --> E
+    I --> E
 ```
-retrieve → generate → grade (grounding + compliance) → [decide]
-  ├─ grounded + compliant → END
-  ├─ no cited_sources → web_fallback (or error if already in fallback)
-  ├─ partial / hallucinated / non-compliant → rewrite → retrieve (loop)
-  ├─ after max_retries → web_fallback → retrieve → generate → END
-  └─ still unresolved → error (safe fallback answer) → END
+
+Text summary:
+
+```
+retrieve → generate → grade (grounding + compliance concurrently) → [decide]
+  ├─ (grounded | partial) + compliant → END
+  ├─ no cited_sources → web_fallback¹ (or best_answer / error)
+  ├─ stall: quality didn't improve → web_fallback¹ (or best_answer)
+  ├─ evidence insufficient → web_fallback¹ (or refine if already on web)
+  ├─ hallucinated / non-compliant + budget remaining → refine → grade (loop)
+  ├─ budget exhausted, fallback unused → web_fallback¹
+  └─ budget exhausted, fallback used → best_answer² (or error)
+
+  ¹ web_fallback: rewrites query for better retrieval, then → retrieve
+  ² best_answer: returns the highest-quality answer seen across all attempts
 ```
 
 ---
@@ -524,6 +620,8 @@ See [docs/compliance_matrix.md](docs/compliance_matrix.md) for the full complian
 | Runtime | Python 3.11+, Docker (optional) |
 
 ---
+
+## Known Limitations
 
 The following are acknowledged gaps, documented here for transparency. They represent areas for future improvement rather than oversights.
 
@@ -568,3 +666,19 @@ LLM prompt/completion pairs are logged via a dedicated `scra.llm_audit` logger a
 ### Background Ingestion State (Multi-Worker)
 
 The `/ingest` endpoint tracks task status in an in-memory dict within the process. With multiple uvicorn workers (`--workers N`) or container replicas, a `task_id` issued by one worker will not be visible to another. For multi-process deployments, replace `_ingest_status` with Redis or a shared database. Single-worker deployments (the default) are unaffected.
+
+---
+
+## Lessons Learned
+
+**Port mismatch caused 80% 500-errors on the first eval run.**
+The server was started on port 8001 but the evaluation harness targeted the default port 8000. Eight of ten questions in the initial run hit connection-refused errors and were scored as failures (0% pass rate). Adding an explicit `--url http://localhost:8001` flag resolved this — the follow-up runs on the same day achieved 0% error rate and 72% pass rate.
+
+**Metadata prepend hurt retrieval quality.**
+Early chunking experiments prepended article metadata (e.g., `Article 5 | Chapter 2`) to each chunk, expecting the structured header to improve cosine similarity. In practice it reduced recall@5 by ~4 pp across both fixed and paragraph split modes (ranks 5–7 in the benchmark vs. ranks 1–2 without metadata). The metadata bloat crowded out substantive content in the chunk embedding, pushing relevant text below the retrieval cutoff. Reverting to clean-text chunks recovered the quality.
+
+**Self-correction latency is dominated by retry depth, not generation.**
+Profiling the eval traces showed that 90%+ of p95 latency came from LangGraph cycling through 2–3 correction retries, each requiring a full LLM round-trip plus Cohere rerank. Single-pass queries cluster around 6–13 s; once fallback or retries kick in, latency jumps to 40–80 s. The `LATENCY_BUDGET_SECONDS` ASGI middleware provides a configurable hard ceiling that prevents indefinite retry chains in production.
+
+**In-process cache breaks under multiple workers.**
+Running the evaluation server with `--workers 2` caused cache hit rates to drop to near-zero — each uvicorn worker maintains its own `QueryCache` with no shared state. Switching back to single-worker mode (the default) restored expected hit rates. This is now documented in Known Limitations with a Redis migration path noted.

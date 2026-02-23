@@ -95,6 +95,17 @@ Answer:
 """
 
 # ---------------------------------------------------------------------------
+# Query rewriting for web fallback
+# ---------------------------------------------------------------------------
+QUERY_REWRITE_SYSTEM_PROMPT = """\
+You are a search query specialist for legal document retrieval. \
+Rewrite the user's question to maximise recall against a corpus of the \
+EU AI Act (Regulation (EU) 2024/1689). Use precise legal terminology, \
+expand acronyms, and include synonymous concepts. \
+Return ONLY the rewritten question — no explanation, no preamble.
+"""
+
+# ---------------------------------------------------------------------------
 # Self-correction: refinement prompt fed with grading feedback
 # ---------------------------------------------------------------------------
 REFINEMENT_SYSTEM_PROMPT = """\

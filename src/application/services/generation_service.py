@@ -9,6 +9,7 @@ import unicodedata
 from src.application.prompts import (
     GENERATION_SYSTEM_PROMPT,
     GENERATION_USER_PROMPT,
+    QUERY_REWRITE_SYSTEM_PROMPT,
     REFINEMENT_SYSTEM_PROMPT,
     REFINEMENT_USER_PROMPT,
 )
@@ -123,12 +124,10 @@ class GenerationService:
 
     async def rewrite_question(self, question: str) -> str:
         """Rewrite the question for better retrieval (query expansion)."""
-        rewrite_prompt = (
-            f"Rewrite the following question to improve retrieval from a legal "
-            f"document corpus about the EU AI Act. Return ONLY the rewritten question.\n\n"
-            f"Original: {question}"
+        return await self._llm.generate(
+            question,
+            system_prompt=QUERY_REWRITE_SYSTEM_PROMPT,
         )
-        return await self._llm.generate(rewrite_prompt)
 
     async def refine_answer(
         self,
