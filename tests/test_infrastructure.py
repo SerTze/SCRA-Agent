@@ -405,3 +405,35 @@ class TestLangfuseManager:
 
         mgr = LangfuseManager()
         mgr.flush()  # should not raise
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# OpenAIAdapter
+# ═══════════════════════════════════════════════════════════════════════════
+class TestOpenAIAdapter:
+    """Tests for OpenAIAdapter construction – ChatOpenAI is mocked."""
+
+    def test_raises_adapter_error_without_api_key(self) -> None:
+        from src.infrastructure.openai_adapter import OpenAIAdapter
+
+        settings = MagicMock()
+        settings.OPENAI_API_KEY = ""
+        with pytest.raises(AdapterError, match="OPENAI_API_KEY"):
+            OpenAIAdapter(settings)
+
+    def test_initialises_with_valid_key(self) -> None:
+        from unittest.mock import patch
+
+        from src.infrastructure.openai_adapter import OpenAIAdapter
+
+        settings = MagicMock()
+        settings.OPENAI_API_KEY = "sk-test-key"
+        settings.OPENAI_MODEL = "gpt-4o-mini"
+        settings.OPENAI_TEMPERATURE = 0.0
+        settings.OPENAI_MAX_TOKENS = 4096
+
+        with patch("src.infrastructure.openai_adapter.ChatOpenAI") as mock_chat:
+            adapter = OpenAIAdapter(settings)
+
+        mock_chat.assert_called_once()
+        assert adapter._provider_name == "OpenAI"

@@ -172,3 +172,45 @@ class TestQueryCacheIntegration:
             stats = client.get("/stats").json()
 
         assert stats["cache_size"] == 1
+
+
+# ------------------------------------------------------------------
+# /ingest endpoints
+# ------------------------------------------------------------------
+class TestIngestEndpoint:
+    def test_ingest_post_returns_202_with_task_id(self, test_settings: Settings):
+        """POST /ingest should return 202 Accepted and a task_id immediately."""
+        with patch("src.presentation.api.build_workflow", return_value=AsyncMock()):
+            app = create_app(test_settings)
+            client = TestClient(app)
+
+        resp = client.post("/ingest")
+        assert resp.status_code == 202
+        data = resp.json()
+        assert data["status"] == "accepted"
+        assert "task_id" in data
+        assert data["task_id"] is not None
+
+    def test_ingest_status_unknown_task_returns_404(self, test_settings: Settings):
+        """GET /ingest/{task_id} with an unknown ID should return 404."""
+        with patch("src.presentation.api.build_workflow", return_value=AsyncMock()):
+            app = create_app(test_settings)
+            client = TestClient(app)
+
+        resp = client.get("/ingest/does-not-exist-task-id")
+        assert resp.status_code == 404
+
+    def test_ingest_status_known_task_returns_status(self, test_settings: Settings):
+        """After POST /ingest, the returned task_id should be poll-able."""
+        with patch("src.presentation.api.build_workflow", return_value=AsyncMock()):
+            app = create_app(test_settings)
+            client = TestClient(app)
+
+        ingest_resp = client.post("/ingest")
+        task_id = ingest_resp.json()["task_id"]
+
+        status_resp = client.get(f"/ingest/{task_id}")
+        assert status_resp.status_code == 200
+        data = status_resp.json()
+        assert data["status"] in ("running", "completed", "failed")
+        assert data["task_id"] == task_id
