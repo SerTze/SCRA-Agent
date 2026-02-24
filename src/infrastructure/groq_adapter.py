@@ -15,8 +15,7 @@ class GroqAdapter(BaseLLMAdapter):
     def __init__(self, settings: Settings) -> None:
         if not settings.GROQ_API_KEY:
             raise AdapterError(
-                "GROQ_API_KEY is not configured. "
-                "Set it in .env or as an environment variable."
+                "GROQ_API_KEY is not configured. Set it in .env or as an environment variable."
             )
         self._settings = settings
         self._provider_name = "Groq"

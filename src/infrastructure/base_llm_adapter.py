@@ -126,9 +126,7 @@ class BaseLLMAdapter:
             return result_text
         except Exception as exc:
             logger.exception("%s generation failed after retries", self._provider_name)
-            raise AdapterError(
-                f"{self._provider_name} generation error: {exc}"
-            ) from exc
+            raise AdapterError(f"{self._provider_name} generation error: {exc}") from exc
 
     async def generate_structured(
         self,
@@ -142,9 +140,7 @@ class BaseLLMAdapter:
         messages = self._build_messages(prompt, system_prompt)
         start = time.perf_counter()
         try:
-            response = await self._invoke_structured_with_retry(
-                structured_llm, messages
-            )
+            response = await self._invoke_structured_with_retry(structured_llm, messages)
             elapsed_ms = (time.perf_counter() - start) * 1000
 
             # with include_raw=True the response is a dict:
@@ -176,9 +172,7 @@ class BaseLLMAdapter:
                 "%s structured generation failed after retries",
                 self._provider_name,
             )
-            raise AdapterError(
-                f"{self._provider_name} structured generation error: {exc}"
-            ) from exc
+            raise AdapterError(f"{self._provider_name} structured generation error: {exc}") from exc
 
     # ── Internals ────────────────────────────────────────────────────────
 
@@ -198,8 +192,8 @@ class BaseLLMAdapter:
         """
         async with self._cache_lock:
             if schema not in self._structured_cache:
-                self._structured_cache[schema] = (
-                    self._client.with_structured_output(schema, include_raw=True)
+                self._structured_cache[schema] = self._client.with_structured_output(
+                    schema, include_raw=True
                 )
             return self._structured_cache[schema]
 

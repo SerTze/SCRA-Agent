@@ -21,14 +21,11 @@ class CitationValidationError(SCRAError):
         self.missing_sources = missing_sources or []
 
 
-
 class LatencyBudgetExceeded(SCRAError):
     """Raised when a request exceeds the 10-second latency budget."""
 
     def __init__(self, elapsed_seconds: float, budget_seconds: float = 10.0):
-        super().__init__(
-            f"Latency budget exceeded: {elapsed_seconds:.2f}s > {budget_seconds:.2f}s"
-        )
+        super().__init__(f"Latency budget exceeded: {elapsed_seconds:.2f}s > {budget_seconds:.2f}s")
         self.elapsed_seconds = elapsed_seconds
         self.budget_seconds = budget_seconds
 

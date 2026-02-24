@@ -34,9 +34,10 @@ def docs() -> list[EvidenceChunk]:
 # ---------------------------------------------------------------------------
 class TestValidateStructured:
     def test_valid_sources_pass(self, docs: list[EvidenceChunk]):
-        assert CitationService.validate_structured(
-            ["EUAI_Art5_Chunk0", "EUAI_Rec23_Chunk0"], docs
-        ) is True
+        assert (
+            CitationService.validate_structured(["EUAI_Art5_Chunk0", "EUAI_Rec23_Chunk0"], docs)
+            is True
+        )
 
     def test_empty_sources_pass(self, docs: list[EvidenceChunk]):
         """Empty cited_sources is not an error – caller decides fallback."""
@@ -44,14 +45,10 @@ class TestValidateStructured:
 
     def test_unknown_source_raises(self, docs: list[EvidenceChunk]):
         with pytest.raises(CitationValidationError):
-            CitationService.validate_structured(
-                ["EUAI_Art5_Chunk0", "EUAI_Art99_Chunk0"], docs
-            )
+            CitationService.validate_structured(["EUAI_Art5_Chunk0", "EUAI_Art99_Chunk0"], docs)
 
     def test_single_valid_source(self, docs: list[EvidenceChunk]):
-        assert CitationService.validate_structured(
-            ["EUAI_Art5_Chunk0"], docs
-        ) is True
+        assert CitationService.validate_structured(["EUAI_Art5_Chunk0"], docs) is True
 
 
 # ---------------------------------------------------------------------------
@@ -73,12 +70,7 @@ class TestExtractInlineCitations:
 
 class TestExtractSourceBlockIds:
     def test_extracts_from_source_block(self, service: CitationService):
-        text = (
-            "Answer text.\n\n"
-            "Sources:\n"
-            "- [EUAI_Art5_Chunk0]\n"
-            "- [EUAI_Rec23_Chunk0]\n"
-        )
+        text = "Answer text.\n\nSources:\n- [EUAI_Art5_Chunk0]\n- [EUAI_Rec23_Chunk0]\n"
         ids = service.extract_source_block_ids(text)
         assert set(ids) == {"EUAI_Art5_Chunk0", "EUAI_Rec23_Chunk0"}
 
@@ -87,9 +79,7 @@ class TestExtractSourceBlockIds:
 
 
 class TestValidate:
-    def test_valid_citations_pass(
-        self, service: CitationService, docs: list[EvidenceChunk]
-    ):
+    def test_valid_citations_pass(self, service: CitationService, docs: list[EvidenceChunk]):
         text = (
             "Article 5 prohibits [EUAI_Art5_Chunk0]. "
             "Recital 23 explains [EUAI_Rec23_Chunk0].\n\n"
@@ -102,11 +92,7 @@ class TestValidate:
     def test_missing_source_block_entry_raises(
         self, service: CitationService, docs: list[EvidenceChunk]
     ):
-        text = (
-            "Article 5 prohibits [EUAI_Art5_Chunk0].\n\n"
-            "Sources:\n"
-            "- [EUAI_Rec23_Chunk0]\n"
-        )
+        text = "Article 5 prohibits [EUAI_Art5_Chunk0].\n\nSources:\n- [EUAI_Rec23_Chunk0]\n"
         with pytest.raises(CitationValidationError):
             service.validate(text, docs)
 
@@ -115,21 +101,12 @@ class TestValidate:
     ):
         """Sources listed but not cited inline should warn, not raise."""
         text = (
-            "Article 5 prohibits stuff.\n\n"
-            "Sources:\n"
-            "- [EUAI_Art5_Chunk0]\n"
-            "- [EUAI_Rec23_Chunk0]\n"
+            "Article 5 prohibits stuff.\n\nSources:\n- [EUAI_Art5_Chunk0]\n- [EUAI_Rec23_Chunk0]\n"
         )
         # Should NOT raise – extra sources in the block are non-fatal
         assert service.validate(text, docs) is True
 
-    def test_unknown_document_raises(
-        self, service: CitationService, docs: list[EvidenceChunk]
-    ):
-        text = (
-            "See [EUAI_Art99_Chunk0].\n\n"
-            "Sources:\n"
-            "- [EUAI_Art99_Chunk0]\n"
-        )
+    def test_unknown_document_raises(self, service: CitationService, docs: list[EvidenceChunk]):
+        text = "See [EUAI_Art99_Chunk0].\n\nSources:\n- [EUAI_Art99_Chunk0]\n"
         with pytest.raises(CitationValidationError):
             service.validate(text, docs)

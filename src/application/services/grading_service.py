@@ -30,7 +30,6 @@ from src.domain.protocols import LLMPort
 logger = logging.getLogger(__name__)
 
 
-
 class GradingService:
     """Single-responsibility grading: grounding + compliance.
 
@@ -49,9 +48,7 @@ class GradingService:
         self._compliance_llm = compliance_llm or llm
         # Check once whether the adapters support structured output
         self._supports_structured = hasattr(llm, "generate_structured")
-        self._compliance_supports_structured = hasattr(
-            self._compliance_llm, "generate_structured"
-        )
+        self._compliance_supports_structured = hasattr(self._compliance_llm, "generate_structured")
 
     @staticmethod
     def _build_evidence_for_grading(
@@ -75,12 +72,12 @@ class GradingService:
     ) -> GroundingResult:
         """Return a GroundingResult with score and reasoning."""
         if not documents or not generation:
-            return GroundingResult(score="unknown", reasoning="No documents or generation provided.")
+            return GroundingResult(
+                score="unknown", reasoning="No documents or generation provided."
+            )
 
         evidence_text = self._build_evidence_for_grading(documents)
-        prompt = GROUNDING_USER_PROMPT.format(
-            evidence=evidence_text, generation=generation
-        )
+        prompt = GROUNDING_USER_PROMPT.format(evidence=evidence_text, generation=generation)
 
         # ── Structured output path (preferred) ────────────────────────
         if self._supports_structured:
@@ -92,7 +89,9 @@ class GradingService:
                 )
                 logger.info(
                     "Grounding score (structured): %s – %s | evidence_insufficient=%s",
-                    result.score, result.reasoning, result.evidence_insufficient,
+                    result.score,
+                    result.reasoning,
+                    result.evidence_insufficient,
                 )
                 return result
             except Exception:
@@ -138,9 +137,7 @@ class GradingService:
             )
 
         evidence_text = self._build_evidence_for_grading(documents)
-        prompt = COMPLIANCE_USER_PROMPT.format(
-            evidence=evidence_text, generation=generation
-        )
+        prompt = COMPLIANCE_USER_PROMPT.format(evidence=evidence_text, generation=generation)
 
         # ── Structured output path (preferred) ────────────────────────
         if self._compliance_supports_structured:
@@ -174,7 +171,9 @@ class GradingService:
                 risk_flags=parsed.get("risk_flags", []),
                 reasoning=parsed.get("reasoning", []),
             )
-            logger.info("Compliance: compliant=%s, flags=%s", analysis.is_compliant, analysis.risk_flags)
+            logger.info(
+                "Compliance: compliant=%s, flags=%s", analysis.is_compliant, analysis.risk_flags
+            )
             return analysis
         except LLMResponseParsingError:
             return ComplianceAnalysis(

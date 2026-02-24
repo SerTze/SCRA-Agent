@@ -17,7 +17,9 @@ class TestScoreRelevance:
 
     def test_partial_keywords(self):
         answer = "Social scoring is not allowed."
-        assert score_relevance(answer, ["prohibited", "Article 5", "scoring"]) == pytest.approx(1 / 3)
+        assert score_relevance(answer, ["prohibited", "Article 5", "scoring"]) == pytest.approx(
+            1 / 3
+        )
 
     def test_no_keywords(self):
         answer = "The weather is nice."

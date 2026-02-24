@@ -51,11 +51,11 @@ class Settings(BaseSettings):
     LATENCY_BUDGET_SECONDS: float = 10.0
 
     # ── Rate limiting ─────────────────────────────────────────────────────
-    RATE_LIMIT_RPM: float = 30.0    # sustained requests per minute per client
-    RATE_LIMIT_BURST: int = 10      # max burst size
+    RATE_LIMIT_RPM: float = 30.0  # sustained requests per minute per client
+    RATE_LIMIT_BURST: int = 10  # max burst size
 
     # ── Response cache ────────────────────────────────────────────────────
-    CACHE_MAX_SIZE: int = 128       # max cached query results
+    CACHE_MAX_SIZE: int = 128  # max cached query results
     CACHE_TTL_SECONDS: float = 300.0  # cache entry TTL (5 minutes)
     CACHE_SIMILARITY_THRESHOLD: float = 0.90  # semantic cache cosine threshold
     # ── LangGraph ─────────────────────────────────────────────────────────
@@ -80,8 +80,8 @@ class Settings(BaseSettings):
     # ── Logging ───────────────────────────────────────────────────────────────────
     LOG_FORMAT: str = "text"  # "text" or "json"
     LOG_LEVEL: str = "INFO"
-    LOG_FILE: str = "logs/scra.log"    # "" to disable file logging
+    LOG_FILE: str = "logs/scra.log"  # "" to disable file logging
     LOG_FILE_MAX_BYTES: int = 10_485_760  # 10 MB per log file
-    LOG_FILE_BACKUP_COUNT: int = 5        # keep 5 rotated files
+    LOG_FILE_BACKUP_COUNT: int = 5  # keep 5 rotated files
     # ── Testing ───────────────────────────────────────────────────────────
     RUN_LIVE_TESTS: bool = False

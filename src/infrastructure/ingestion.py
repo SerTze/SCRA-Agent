@@ -24,11 +24,11 @@ _CHUNK_OVERLAP_CHARS = 200
 _RECITAL_RE = re.compile(r"^\((\d+)\)\s+", re.MULTILINE)
 # Legal paragraph markers – used by paragraph split mode
 _PARA_MARKER_RE = re.compile(
-    r"(?:^|\n)"            # start of string or newline
-    r"(?:"                  # open non-capturing group
-    r"\d+\.\s"             # numbered paragraph: "1. "
-    r"|\([a-z]\)\s"        # lettered sub-paragraph: "(a) "
-    r"|\([ivxlc]+\)\s"     # roman-numeral sub-paragraph: "(i) "
+    r"(?:^|\n)"  # start of string or newline
+    r"(?:"  # open non-capturing group
+    r"\d+\.\s"  # numbered paragraph: "1. "
+    r"|\([a-z]\)\s"  # lettered sub-paragraph: "(a) "
+    r"|\([ivxlc]+\)\s"  # roman-numeral sub-paragraph: "(i) "
     r")",
     re.IGNORECASE,
 )
@@ -41,9 +41,7 @@ _BASE_META = {
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
-_FALLBACK_EURLEX_URL = (
-    "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689"
-)
+_FALLBACK_EURLEX_URL = "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689"
 
 _HTTP_HEADERS = {
     "User-Agent": (
@@ -129,15 +127,15 @@ class IngestionPipeline:
                         return resp.text
                     logger.warning(
                         "URL %s returned status=%d, length=%d – skipping",
-                        url[:60], resp.status_code, len(resp.text),
+                        url[:60],
+                        resp.status_code,
+                        len(resp.text),
                     )
                 except Exception as exc:
                     logger.warning("URL %s failed: %s", url[:60], exc)
                     last_exc = exc
 
-        raise IngestionError(
-            f"All download sources failed. Last error: {last_exc}"
-        )
+        raise IngestionError(f"All download sources failed. Last error: {last_exc}")
 
     # ------------------------------------------------------------------
     # Structured HTML parsing
@@ -148,7 +146,7 @@ class IngestionPipeline:
 
         try:
             # Use lxml-xml for XHTML from CELLAR, fall back to lxml/html.parser
-            if html.strip().startswith("<?xml") or 'xmlns=' in html[:500]:
+            if html.strip().startswith("<?xml") or "xmlns=" in html[:500]:
                 soup = BeautifulSoup(html, "lxml-xml")
             else:
                 soup = BeautifulSoup(html, "lxml")
@@ -203,9 +201,7 @@ class IngestionPipeline:
                 continue
 
             art_heading = f"Article {art_num}"
-            for ci, sub_chunk in enumerate(
-                self._chunk_text(text, section_heading=art_heading)
-            ):
+            for ci, sub_chunk in enumerate(self._chunk_text(text, section_heading=art_heading)):
                 source_id = f"EUAI_Art{art_num}_Chunk{ci}"
                 chunks.append(
                     EvidenceChunk(
@@ -239,16 +235,18 @@ class IngestionPipeline:
         for idx, match in enumerate(recital_matches):
             rec_num = match.group(1)
             start = match.start()
-            end = recital_matches[idx + 1].start() if idx + 1 < len(recital_matches) else start + self._strategy.max_chars
+            end = (
+                recital_matches[idx + 1].start()
+                if idx + 1 < len(recital_matches)
+                else start + self._strategy.max_chars
+            )
             text = preamble_text[start:end].strip()
 
             if len(text) < 20:
                 continue
 
             rec_heading = f"Recital {rec_num}"
-            for ci, sub_chunk in enumerate(
-                self._chunk_text(text, section_heading=rec_heading)
-            ):
+            for ci, sub_chunk in enumerate(self._chunk_text(text, section_heading=rec_heading)):
                 source_id = f"EUAI_Rec{rec_num}_Chunk{ci}"
                 chunks.append(
                     EvidenceChunk(
@@ -294,9 +292,7 @@ class IngestionPipeline:
                 continue
 
             annex_heading = f"Annex {annex_id}"
-            for ci, sub_chunk in enumerate(
-                self._chunk_text(text, section_heading=annex_heading)
-            ):
+            for ci, sub_chunk in enumerate(self._chunk_text(text, section_heading=annex_heading)):
                 source_id = f"EUAI_Annex{annex_id}_Chunk{ci}"
                 chunks.append(
                     EvidenceChunk(
@@ -331,13 +327,17 @@ class IngestionPipeline:
                     content="[Ingestion fallback – no content extracted]",
                     source_id="EUAI_File_empty_Chunk0",
                     source_type="primary_legal",
-                    metadata={**_BASE_META, "section_type": "fallback", "source_url": self._source_url},
+                    metadata={
+                        **_BASE_META,
+                        "section_type": "fallback",
+                        "source_url": self._source_url,
+                    },
                 )
             ]
 
         chunks: list[EvidenceChunk] = []
         page_size = self._strategy.max_chars * 2
-        pages = [text[i:i + page_size] for i in range(0, len(text), page_size)]
+        pages = [text[i : i + page_size] for i in range(0, len(text), page_size)]
         for pi, page_text in enumerate(pages):
             for ci, sub_chunk in enumerate(
                 self._chunk_text(page_text, section_heading=f"Page {pi}")
@@ -437,7 +437,9 @@ class IngestionPipeline:
                     current_parts = []
                     current_len = 0
                 # Split the oversized segment
-                for piece in IngestionPipeline._split_text(seg, max_chars=max_chars, overlap=overlap):
+                for piece in IngestionPipeline._split_text(
+                    seg, max_chars=max_chars, overlap=overlap
+                ):
                     result.append(piece)
                 continue
 
@@ -502,7 +504,7 @@ class IngestionPipeline:
             if len(para) > max_chars:
                 _flush()
                 for i in range(0, len(para), max_chars - overlap):
-                    result.append(para[i:i + max_chars])
+                    result.append(para[i : i + max_chars])
                 current = []
                 current_len = 0
                 continue

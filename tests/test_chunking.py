@@ -12,6 +12,7 @@ from src.infrastructure.ingestion import IngestionPipeline
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_pipeline(
     strategy: ChunkingStrategy | None = None,
 ) -> IngestionPipeline:
@@ -69,7 +70,9 @@ class TestChunkTextDispatcher:
     """Verify _chunk_text routes to the right splitter."""
 
     def test_fixed_mode_uses_split_text(self) -> None:
-        pipeline = _make_pipeline(ChunkingStrategy(split_mode="fixed", max_chars=100, overlap_chars=20))
+        pipeline = _make_pipeline(
+            ChunkingStrategy(split_mode="fixed", max_chars=100, overlap_chars=20)
+        )
         # Fixed splitter needs newlines between paragraphs
         text = "\n".join(f"Paragraph {i} content here." for i in range(20))
         chunks = pipeline._chunk_text(text)
@@ -78,9 +81,7 @@ class TestChunkTextDispatcher:
             assert len(c) <= 150  # some tolerance for overlap
 
     def test_paragraph_mode_uses_paragraph_splitter(self) -> None:
-        pipeline = _make_pipeline(
-            ChunkingStrategy(split_mode="paragraph", max_chars=500)
-        )
+        pipeline = _make_pipeline(ChunkingStrategy(split_mode="paragraph", max_chars=500))
         text = "Introduction text.\n1. First requirement.\n2. Second requirement.\n3. Third requirement."
         chunks = pipeline._chunk_text(text)
         # With paragraph mode, the numbered items should be respected
@@ -150,12 +151,7 @@ class TestSplitByParagraph:
         assert "Article heading" in chunks[0]
 
     def test_roman_numeral_subparagraphs(self) -> None:
-        text = (
-            "1. Main paragraph.\n"
-            "(i) sub-item one.\n"
-            "(ii) sub-item two.\n"
-            "(iii) sub-item three."
-        )
+        text = "1. Main paragraph.\n(i) sub-item one.\n(ii) sub-item two.\n(iii) sub-item three."
         chunks = IngestionPipeline._split_by_paragraph(text, max_chars=500)
         assert len(chunks) >= 1
 
@@ -169,13 +165,7 @@ class TestSplitByParagraph:
             assert len(c) <= 250  # tolerance
 
     def test_small_segments_merged(self) -> None:
-        text = (
-            "(a) Yes.\n"
-            "(b) No.\n"
-            "(c) Maybe.\n"
-            "(d) Perhaps.\n"
-            "(e) Certainly."
-        )
+        text = "(a) Yes.\n(b) No.\n(c) Maybe.\n(d) Perhaps.\n(e) Certainly."
         chunks = IngestionPipeline._split_by_paragraph(text, max_chars=500)
         # All are tiny – should be merged into one chunk
         assert len(chunks) == 1
@@ -193,7 +183,9 @@ class TestSplitByParagraph:
         assert len(chunks) == 1
 
     def test_intro_before_first_marker(self) -> None:
-        text = "This regulation applies to all providers.\n1. First condition.\n2. Second condition."
+        text = (
+            "This regulation applies to all providers.\n1. First condition.\n2. Second condition."
+        )
         chunks = IngestionPipeline._split_by_paragraph(text, max_chars=5000)
         assert len(chunks) == 1
         assert "This regulation" in chunks[0]

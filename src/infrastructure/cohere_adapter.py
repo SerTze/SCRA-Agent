@@ -25,8 +25,7 @@ class CohereAdapter:
     def __init__(self, settings: Settings) -> None:
         if not settings.COHERE_API_KEY:
             raise AdapterError(
-                "COHERE_API_KEY is not configured. "
-                "Set it in .env or as an environment variable."
+                "COHERE_API_KEY is not configured. Set it in .env or as an environment variable."
             )
         self._settings = settings
         self._client = cohere.AsyncClientV2(

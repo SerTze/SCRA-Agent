@@ -79,9 +79,7 @@ def configure_logging(settings: Settings) -> None:
             backupCount=settings.LOG_FILE_BACKUP_COUNT,
             encoding="utf-8",
         )
-        file_handler.setFormatter(
-            _JSONFormatter() if settings.LOG_FORMAT == "json" else formatter
-        )
+        file_handler.setFormatter(_JSONFormatter() if settings.LOG_FORMAT == "json" else formatter)
         root.addHandler(file_handler)
         logger.info("File logging enabled → %s", log_path.resolve())
 
@@ -129,9 +127,7 @@ class LangfuseManager:
             logger.info("Langfuse tracing enabled → %s", settings.LANGFUSE_HOST)
             return self._handler
         except ImportError:
-            logger.warning(
-                "langfuse package not installed – pip install langfuse"
-            )
+            logger.warning("langfuse package not installed – pip install langfuse")
             return None
         except Exception:
             logger.exception("Failed to initialise Langfuse callback handler")
@@ -182,9 +178,7 @@ def configure_telemetry(settings: Settings) -> trace.Tracer:
             )
             # Batch processor for network exporters (amortises overhead)
             provider.add_span_processor(BatchSpanProcessor(exporter))
-            logger.info(
-                "Using OTLP exporter → %s", settings.OTEL_EXPORTER_ENDPOINT
-            )
+            logger.info("Using OTLP exporter → %s", settings.OTEL_EXPORTER_ENDPOINT)
         except ImportError:
             logger.warning(
                 "opentelemetry-exporter-otlp-proto-grpc not installed; "

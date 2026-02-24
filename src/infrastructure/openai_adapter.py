@@ -15,8 +15,7 @@ class OpenAIAdapter(BaseLLMAdapter):
     def __init__(self, settings: Settings) -> None:
         if not settings.OPENAI_API_KEY:
             raise AdapterError(
-                "OPENAI_API_KEY is not configured. "
-                "Set it in .env or as an environment variable."
+                "OPENAI_API_KEY is not configured. Set it in .env or as an environment variable."
             )
         self._settings = settings
         self._provider_name = "OpenAI"

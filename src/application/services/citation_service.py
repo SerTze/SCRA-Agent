@@ -48,9 +48,7 @@ class CitationService:
                 missing_sources=[],
             )
 
-        logger.info(
-            "Citation validation passed (%d sources)", len(set(cited_sources))
-        )
+        logger.info("Citation validation passed (%d sources)", len(set(cited_sources)))
         return True
 
     # ------------------------------------------------------------------
@@ -84,9 +82,7 @@ class CitationService:
         sources_not_used_inline = source_ids - inline_ids
 
         if inline_not_in_sources:
-            errors.append(
-                f"Inline citations not in Sources block: {sorted(inline_not_in_sources)}"
-            )
+            errors.append(f"Inline citations not in Sources block: {sorted(inline_not_in_sources)}")
         if sources_not_used_inline:
             logger.warning(
                 "Sources block entries not used inline (non-fatal): %s",
@@ -95,9 +91,7 @@ class CitationService:
 
         cited_but_missing = (inline_ids | source_ids) - available_ids
         if cited_but_missing:
-            errors.append(
-                f"Citations reference unknown documents: {sorted(cited_but_missing)}"
-            )
+            errors.append(f"Citations reference unknown documents: {sorted(cited_but_missing)}")
 
         if errors:
             msg = "; ".join(errors)

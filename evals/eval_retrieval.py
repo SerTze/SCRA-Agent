@@ -48,9 +48,11 @@ from src.infrastructure.ingestion import IngestionPipeline
 # Data classes
 # ---------------------------------------------------------------------------
 
+
 def _strip_chunk_suffix(source_id: str) -> str:
     """EUAI_Art5_Chunk3 → EUAI_Art5"""
     import re
+
     return re.sub(r"_Chunk\d+$", "", source_id)
 
 
@@ -108,6 +110,7 @@ class RetrievalReport:
 # Evaluation logic
 # ---------------------------------------------------------------------------
 
+
 async def run_retrieval_eval(
     settings: Settings,
     strategy: ChunkingStrategy,
@@ -138,9 +141,11 @@ async def run_retrieval_eval(
 
     # ── Re-ingest if requested ────────────────────────────────────────
     if reingest:
-        print(f"Re-ingesting with strategy: {strategy.name} "
-              f"(mode={strategy.split_mode}, max={strategy.max_chars}, "
-              f"overlap={strategy.overlap_chars}, prepend={strategy.prepend_metadata})")
+        print(
+            f"Re-ingesting with strategy: {strategy.name} "
+            f"(mode={strategy.split_mode}, max={strategy.max_chars}, "
+            f"overlap={strategy.overlap_chars}, prepend={strategy.prepend_metadata})"
+        )
 
         # Use a separate collection for each strategy to avoid conflicts
         eval_settings = settings.model_copy(
@@ -173,8 +178,10 @@ async def run_retrieval_eval(
         eval_settings = settings
         adapter = ChromaAdapter(eval_settings)
         report.chunk_count = adapter._collection.count()
-        print(f"Evaluating existing collection: {eval_settings.CHROMA_COLLECTION_NAME} "
-              f"({report.chunk_count} chunks)")
+        print(
+            f"Evaluating existing collection: {eval_settings.CHROMA_COLLECTION_NAME} "
+            f"({report.chunk_count} chunks)"
+        )
 
     # ── Run queries ───────────────────────────────────────────────────
     results: list[QuestionRetrievalResult] = []
@@ -265,9 +272,7 @@ async def run_retrieval_eval(
 
     ranked = [r.first_match_rank for r in scored if r.first_match_rank > 0]
     report.mean_first_match_rank = sum(ranked) / len(ranked) if ranked else 0.0
-    report.questions_with_match_in_top5 = sum(
-        1 for r in scored if r.sources_found_in_top5 > 0
-    ) / n
+    report.questions_with_match_in_top5 = sum(1 for r in scored if r.sources_found_in_top5 > 0) / n
     report.distinct_sources_retrieved = len(all_sources)
     report.results = [asdict(r) for r in results]
 
@@ -277,6 +282,7 @@ async def run_retrieval_eval(
 # ---------------------------------------------------------------------------
 # Comparison
 # ---------------------------------------------------------------------------
+
 
 def compare_retrieval(baseline_path: str, new_path: str) -> bool:
     """Compare two retrieval runs.  Returns True if no regressions."""
@@ -296,12 +302,16 @@ def compare_retrieval(baseline_path: str, new_path: str) -> bool:
     print("=" * 72)
     print("RETRIEVAL STRATEGY COMPARISON")
     print("=" * 72)
-    print(f"  Baseline: {baseline.get('strategy_name', '?')} "
-          f"(mode={baseline.get('split_mode')}, max={baseline.get('max_chars')}, "
-          f"overlap={baseline.get('overlap_chars')})")
-    print(f"  New:      {new.get('strategy_name', '?')} "
-          f"(mode={new.get('split_mode')}, max={new.get('max_chars')}, "
-          f"overlap={new.get('overlap_chars')})")
+    print(
+        f"  Baseline: {baseline.get('strategy_name', '?')} "
+        f"(mode={baseline.get('split_mode')}, max={baseline.get('max_chars')}, "
+        f"overlap={baseline.get('overlap_chars')})"
+    )
+    print(
+        f"  New:      {new.get('strategy_name', '?')} "
+        f"(mode={new.get('split_mode')}, max={new.get('max_chars')}, "
+        f"overlap={new.get('overlap_chars')})"
+    )
     print("-" * 72)
     print(f"  {'Metric':<25} {'Baseline':>10} {'New':>10} {'Delta':>15}")
     print("-" * 72)
@@ -350,13 +360,9 @@ def compare_retrieval(baseline_path: str, new_path: str) -> bool:
         old_recall = old_r.get("recall_at_5", 0)
         new_recall = new_r.get("recall_at_5", 0)
         if new_recall > old_recall:
-            improvements.append(
-                f"  {eval_id}: recall@5 {old_recall:.0%} → {new_recall:.0%}"
-            )
+            improvements.append(f"  {eval_id}: recall@5 {old_recall:.0%} → {new_recall:.0%}")
         elif new_recall < old_recall:
-            degradations.append(
-                f"  {eval_id}: recall@5 {old_recall:.0%} → {new_recall:.0%}"
-            )
+            degradations.append(f"  {eval_id}: recall@5 {old_recall:.0%} → {new_recall:.0%}")
 
     if improvements:
         print(f"\n✅ {len(improvements)} question(s) gained top-5 hits:")
@@ -423,8 +429,7 @@ async def main() -> None:
     parser.add_argument(
         "--strategy",
         default=None,
-        help="Strategy name (preset or custom). Presets: "
-        + ", ".join(PRESET_STRATEGIES.keys()),
+        help="Strategy name (preset or custom). Presets: " + ", ".join(PRESET_STRATEGIES.keys()),
     )
     parser.add_argument(
         "--split-mode",

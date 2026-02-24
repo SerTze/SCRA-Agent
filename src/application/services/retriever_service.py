@@ -24,9 +24,7 @@ _SUB_BOOST_FACTOR = 0.05  # Multiplier for section weight sub-boost
 class SiblingRetrieverPort(Protocol):
     """Minimal interface for sibling chunk expansion."""
 
-    async def retrieve_siblings(
-        self, source_ids: list[str], k: int = 2
-    ) -> list[EvidenceChunk]: ...
+    async def retrieve_siblings(self, source_ids: list[str], k: int = 2) -> list[EvidenceChunk]: ...
 
 
 class RetrieverService:
@@ -54,9 +52,7 @@ class RetrieverService:
     ) -> list[EvidenceChunk]:
         """Full retrieval pipeline: retrieve → rerank → boost → return."""
         # Step 1 – vector retrieval
-        raw_chunks = await self._retriever.retrieve(
-            query, top_k=self._settings.TOP_K_RETRIEVAL
-        )
+        raw_chunks = await self._retriever.retrieve(query, top_k=self._settings.TOP_K_RETRIEVAL)
         logger.info("Retrieved %d raw chunks from vector store", len(raw_chunks))
 
         # Step 2 – web fallback (only when explicitly requested)
@@ -69,9 +65,7 @@ class RetrieverService:
             return []
 
         # Step 3 – rerank
-        reranked = await self._reranker.rerank(
-            query, raw_chunks, top_n=self._settings.TOP_K_FINAL
-        )
+        reranked = await self._reranker.rerank(query, raw_chunks, top_n=self._settings.TOP_K_FINAL)
 
         # Step 4 – sibling chunk expansion
         expanded = await self._expand_siblings(reranked)
@@ -87,9 +81,7 @@ class RetrieverService:
     # ------------------------------------------------------------------
     # Sibling chunk expansion
     # ------------------------------------------------------------------
-    async def _expand_siblings(
-        self, chunks: list[EvidenceChunk]
-    ) -> list[EvidenceChunk]:
+    async def _expand_siblings(self, chunks: list[EvidenceChunk]) -> list[EvidenceChunk]:
         """Fetch adjacent chunks for top reranked results.
 
         Adds surrounding context from the same article / section
@@ -103,9 +95,7 @@ class RetrieverService:
         source_ids = [c.source_id for c in chunks]
 
         try:
-            siblings = await self._sibling_retriever.retrieve_siblings(
-                source_ids, k=k
-            )
+            siblings = await self._sibling_retriever.retrieve_siblings(source_ids, k=k)
         except Exception:
             logger.warning("Sibling expansion failed – continuing without", exc_info=True)
             return chunks
@@ -121,9 +111,7 @@ class RetrieverService:
             logger.info("Sibling expansion added %d chunks", added)
         return chunks
 
-    def _apply_source_boost(
-        self, chunks: list[EvidenceChunk]
-    ) -> list[EvidenceChunk]:
+    def _apply_source_boost(self, chunks: list[EvidenceChunk]) -> list[EvidenceChunk]:
         """Boost primary_legal chunks by PRIMARY_SOURCE_BOOST."""
         result: list[EvidenceChunk] = []
         for chunk in chunks:

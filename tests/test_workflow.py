@@ -178,6 +178,7 @@ class TestDecideAfterGrounding:
         )
         assert _decide_after_grounding(state) == "error"
 
+
 class TestStallDetection:
     """Test that stalled refinement escalates instead of retrying."""
 
@@ -355,14 +356,17 @@ class TestIsEvidenceInsufficient:
         state = GraphState(question="q")
         assert _is_evidence_insufficient(state) is False
 
-    @pytest.mark.parametrize("phrase", [
-        "The evidence is insufficient to answer this question.",
-        "There is insufficient evidence to verify the categorisation.",
-        "The evidence does not contain information about penalties.",
-        "The evidence does not cover this topic.",
-        "This detail is not present in the evidence.",
-        "There is no relevant evidence in the provided chunks.",
-    ])
+    @pytest.mark.parametrize(
+        "phrase",
+        [
+            "The evidence is insufficient to answer this question.",
+            "There is insufficient evidence to verify the categorisation.",
+            "The evidence does not contain information about penalties.",
+            "The evidence does not cover this topic.",
+            "This detail is not present in the evidence.",
+            "There is no relevant evidence in the provided chunks.",
+        ],
+    )
     def test_legacy_detects_markers(self, phrase: str):
         """Legacy keyword matching still works when structured flag is False."""
         state = GraphState(
@@ -372,12 +376,15 @@ class TestIsEvidenceInsufficient:
         )
         assert _is_evidence_insufficient(state) is True
 
-    @pytest.mark.parametrize("phrase", [
-        "Points 6, 7, and 8 are not found in the provided evidence chunks.",
-        "Some claims are not supported by the evidence.",
-        "The answer lacks supporting evidence for two claims.",
-        "Claims cannot be verified from the sources.",
-    ])
+    @pytest.mark.parametrize(
+        "phrase",
+        [
+            "Points 6, 7, and 8 are not found in the provided evidence chunks.",
+            "Some claims are not supported by the evidence.",
+            "The answer lacks supporting evidence for two claims.",
+            "Claims cannot be verified from the sources.",
+        ],
+    )
     def test_hallucination_descriptions_do_not_trigger(self, phrase: str):
         """Phrases describing hallucinated claims should NOT trigger the legacy path."""
         state = GraphState(

@@ -83,9 +83,7 @@ class GenerationService:
         """
         question = self._sanitize_input(question)
         evidence_block = self._build_evidence_block(documents)
-        prompt = GENERATION_USER_PROMPT.format(
-            question=question, evidence=evidence_block
-        )
+        prompt = GENERATION_USER_PROMPT.format(question=question, evidence=evidence_block)
 
         # Prefer structured output when available
         if self._supports_structured:
@@ -106,9 +104,7 @@ class GenerationService:
                 )
 
         # Fallback: plain text generation → wrap in GenerationResult
-        raw = await self._llm.generate(
-            prompt, system_prompt=GENERATION_SYSTEM_PROMPT
-        )
+        raw = await self._llm.generate(prompt, system_prompt=GENERATION_SYSTEM_PROMPT)
         return GenerationResult(answer=raw, cited_sources=[])
 
     @classmethod
@@ -118,9 +114,7 @@ class GenerationService:
         max_chars: int | None = None,
     ) -> str:
         """Delegate to the shared evidence builder."""
-        return build_evidence_block(
-            documents, max_chars=max_chars or cls._MAX_EVIDENCE_CHARS
-        )
+        return build_evidence_block(documents, max_chars=max_chars or cls._MAX_EVIDENCE_CHARS)
 
     async def rewrite_question(self, question: str) -> str:
         """Rewrite the question for better retrieval (query expansion)."""
@@ -156,7 +150,9 @@ class GenerationService:
             grounding_reasoning=grounding_reasoning,
             compliance_status=compliance_status,
             compliance_flags=", ".join(compliance_flags) if compliance_flags else "none",
-            compliance_reasoning="; ".join(compliance_reasoning) if compliance_reasoning else "none",
+            compliance_reasoning="; ".join(compliance_reasoning)
+            if compliance_reasoning
+            else "none",
         )
 
         if self._supports_structured:
@@ -175,7 +171,5 @@ class GenerationService:
                     exc_info=True,
                 )
 
-        raw = await self._llm.generate(
-            prompt, system_prompt=REFINEMENT_SYSTEM_PROMPT
-        )
+        raw = await self._llm.generate(prompt, system_prompt=REFINEMENT_SYSTEM_PROMPT)
         return GenerationResult(answer=raw, cited_sources=[])

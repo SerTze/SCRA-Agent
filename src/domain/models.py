@@ -67,9 +67,7 @@ class GenerationResult(BaseModel):
     which the workflow uses to trigger the web fallback path.
     """
 
-    answer: str = Field(
-        description="The generated regulatory compliance answer."
-    )
+    answer: str = Field(description="The generated regulatory compliance answer.")
     cited_sources: list[str] = Field(
         default_factory=list,
         description=(
@@ -98,9 +96,7 @@ class GraphState(BaseModel):
     documents: list[EvidenceChunk] = Field(default_factory=list)
     generation: str | None = None
     cited_sources: list[str] = Field(default_factory=list)
-    grounding_score: Literal[
-        "grounded", "partial", "hallucinated", "unknown"
-    ] = "unknown"
+    grounding_score: Literal["grounded", "partial", "hallucinated", "unknown"] = "unknown"
     compliance_analysis: ComplianceAnalysis | None = None
     loop_step: int = 0
     max_retries: int = 3

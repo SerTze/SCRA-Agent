@@ -149,7 +149,9 @@ class ChromaAdapter:
                 )
                 logger.info(
                     "Upserted batch %d–%d of %d chunks",
-                    start + 1, end, total,
+                    start + 1,
+                    end,
+                    total,
                 )
                 if end < total:
                     await asyncio.sleep(self._UPSERT_BASE_DELAY)
@@ -179,10 +181,12 @@ class ChromaAdapter:
             except Exception as exc:
                 is_rate_limit = "429" in str(exc) or "rate" in str(exc).lower()
                 if is_rate_limit and attempt < self._UPSERT_MAX_RETRIES - 1:
-                    delay = self._UPSERT_BASE_DELAY * (2 ** attempt)
+                    delay = self._UPSERT_BASE_DELAY * (2**attempt)
                     logger.warning(
                         "Rate limited on upsert (attempt %d/%d) — waiting %.0fs",
-                        attempt + 1, self._UPSERT_MAX_RETRIES, delay,
+                        attempt + 1,
+                        self._UPSERT_MAX_RETRIES,
+                        delay,
                     )
                     await asyncio.sleep(delay)
                 else:

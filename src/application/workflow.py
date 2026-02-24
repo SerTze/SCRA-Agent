@@ -95,12 +95,8 @@ def _make_generate_node(
 
     async def generate(state: GraphState) -> dict[str, Any]:
         logger.info("[generate] docs=%d", len(state.documents))
-        result = await generation_service.generate_answer(
-            state.question, state.documents
-        )
-        logger.info(
-            "[generate] cited_sources=%d", len(result.cited_sources)
-        )
+        result = await generation_service.generate_answer(state.question, state.documents)
+        logger.info("[generate] cited_sources=%d", len(result.cited_sources))
         return {
             "generation": result.answer,
             "cited_sources": result.cited_sources,
@@ -134,9 +130,7 @@ def _make_grade_node(
 
         # Validate structured citations (may downgrade grounding score)
         try:
-            citation_service.validate_structured(
-                state.cited_sources, state.documents
-            )
+            citation_service.validate_structured(state.cited_sources, state.documents)
         except CitationValidationError as exc:
             logger.warning("[grade] citation validation: %s", exc)
             if grounding_score == "grounded":
@@ -155,7 +149,9 @@ def _make_grade_node(
         if compliance_analysis.risk_flags:
             feedback_parts.append(f"Compliance flags: {', '.join(compliance_analysis.risk_flags)}")
         if compliance_analysis.reasoning:
-            feedback_parts.append(f"Compliance reasoning: {'; '.join(compliance_analysis.reasoning)}")
+            feedback_parts.append(
+                f"Compliance reasoning: {'; '.join(compliance_analysis.reasoning)}"
+            )
         if not compliance_analysis.is_compliant:
             feedback_parts.append("Compliance: FAILED")
 
@@ -177,13 +173,15 @@ def _make_grade_node(
                 rank,
                 state.best_quality_rank,
             )
-            updates.update({
-                "best_generation": generation,
-                "best_grounding_score": grounding_score,
-                "best_compliance_analysis": compliance_analysis,
-                "best_cited_sources": list(state.cited_sources),
-                "best_quality_rank": rank,
-            })
+            updates.update(
+                {
+                    "best_generation": generation,
+                    "best_grounding_score": grounding_score,
+                    "best_compliance_analysis": compliance_analysis,
+                    "best_cited_sources": list(state.cited_sources),
+                    "best_quality_rank": rank,
+                }
+            )
         elif state.loop_step > 0:
             logger.warning(
                 "[grade] stall detected – rank %d did not beat best %d",
@@ -426,8 +424,7 @@ def _decide_after_grounding(state: GraphState) -> str:
     # ── Stall detection: refinement didn't improve quality ───────────
     if state.loop_step > 0 and not state.quality_improved:
         logger.warning(
-            "[decide] stall detected (quality did not improve) → "
-            "escalating to %s",
+            "[decide] stall detected (quality did not improve) → escalating to %s",
             "web_fallback" if not state.fallback_active else "best_answer",
         )
         if not state.fallback_active:
@@ -437,8 +434,7 @@ def _decide_after_grounding(state: GraphState) -> str:
     # ── Evidence insufficiency: refining can't fix missing evidence ──
     if _is_evidence_insufficient(state):
         logger.info(
-            "[decide] grounding reasoning indicates insufficient evidence → "
-            "escalating to %s",
+            "[decide] grounding reasoning indicates insufficient evidence → escalating to %s",
             "web_fallback" if not state.fallback_active else "refine (no alt)",
         )
         if not state.fallback_active:

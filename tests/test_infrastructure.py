@@ -117,9 +117,7 @@ class TestBaseLLMAdapterStructured:
     @pytest.mark.asyncio
     async def test_structured_returns_parsed_model(self) -> None:
         adapter = _ConcreteAdapter()
-        result = await adapter.generate_structured(
-            "q", schema=_StubSchema
-        )
+        result = await adapter.generate_structured("q", schema=_StubSchema)
         assert isinstance(result, _StubSchema)
         assert result.answer == "Hello"
 
@@ -151,9 +149,7 @@ class TestUsageSummary:
         """Track tokens when usage_metadata is absent but response_metadata is present."""
         resp = SimpleNamespace(
             content="ok",
-            response_metadata={
-                "token_usage": {"prompt_tokens": 20, "completion_tokens": 8}
-            },
+            response_metadata={"token_usage": {"prompt_tokens": 20, "completion_tokens": 8}},
         )
         adapter = _ConcreteAdapter()
         adapter._client.ainvoke = AsyncMock(return_value=resp)
@@ -338,16 +334,18 @@ class TestTavilyAdapter:
         settings = MagicMock()
         settings.TAVILY_API_KEY = "fake-key"
         adapter = TavilyAdapter(settings)
-        adapter._client.search = AsyncMock(return_value={
-            "results": [
-                {
-                    "url": "https://eur-lex.europa.eu/art5",
-                    "title": "Article 5",
-                    "content": "Prohibited practices under the EU AI Act",
-                    "score": 0.9,
-                },
-            ]
-        })
+        adapter._client.search = AsyncMock(
+            return_value={
+                "results": [
+                    {
+                        "url": "https://eur-lex.europa.eu/art5",
+                        "title": "Article 5",
+                        "content": "Prohibited practices under the EU AI Act",
+                        "score": 0.9,
+                    },
+                ]
+            }
+        )
 
         results = await adapter.search("prohibited AI practices", max_results=1)
         assert len(results) == 1

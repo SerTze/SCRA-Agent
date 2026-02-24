@@ -67,10 +67,7 @@ class Container:
         Uses ``GROQ_GRADING_MODEL`` if configured (Groq-only), otherwise
         falls back to the primary ``llm_adapter``.
         """
-        if (
-            self.settings.LLM_PROVIDER.lower() == "groq"
-            and self.settings.GROQ_GRADING_MODEL
-        ):
+        if self.settings.LLM_PROVIDER.lower() == "groq" and self.settings.GROQ_GRADING_MODEL:
             grading_settings = self.settings.model_copy(
                 update={"GROQ_MODEL": self.settings.GROQ_GRADING_MODEL}
             )

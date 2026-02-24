@@ -14,9 +14,7 @@ DATASET_PATH = Path("evals/golden_dataset.json")
 
 # Patterns specific enough to be ground truth (matches a specific section)
 # e.g. "EUAI_Art5" or "EUAI_Art10" or "EUAI_AnnexIII" or "EUAI_Art14"
-SPECIFIC_PATTERN = re.compile(
-    r"^EUAI_(Art\d+|Annex[A-Z]+|Rec\d+)$"
-)
+SPECIFIC_PATTERN = re.compile(r"^EUAI_(Art\d+|Annex[A-Z]+|Rec\d+)$")
 
 # Manual overrides for questions where we know the right primary source
 MANUAL_OVERRIDES: dict[str, list[str]] = {

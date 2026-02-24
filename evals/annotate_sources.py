@@ -142,8 +142,10 @@ async def annotate_dataset(
     total = len(dataset)
 
     print(f"Annotating {total} questions using {model} as judge...")
-    print(f"ChromaDB collection: {settings.CHROMA_COLLECTION_NAME} "
-          f"({adapter._collection.count()} chunks)")
+    print(
+        f"ChromaDB collection: {settings.CHROMA_COLLECTION_NAME} "
+        f"({adapter._collection.count()} chunks)"
+    )
     print("=" * 70)
 
     for idx, item in enumerate(dataset, 1):
@@ -159,10 +161,7 @@ async def annotate_dataset(
 
         # Retrieve top-K chunks
         chunks = await adapter.retrieve(question, top_k=top_k)
-        chunk_dicts = [
-            {"source_id": c.source_id, "content": c.content}
-            for c in chunks
-        ]
+        chunk_dicts = [{"source_id": c.source_id, "content": c.content} for c in chunks]
 
         # Ask LLM to judge
         relevant = await judge_relevance(client, model, question, chunk_dicts)
@@ -173,10 +172,7 @@ async def annotate_dataset(
         # Compare with old pattern
         old_pattern = item.get("expected_citation_pattern", "?")
 
-        print(
-            f"[{idx}/{total}] {qid} ({topic}): "
-            f"old='{old_pattern}' → new={relevant}"
-        )
+        print(f"[{idx}/{total}] {qid} ({topic}): old='{old_pattern}' → new={relevant}")
 
     print("=" * 70)
 
@@ -192,11 +188,8 @@ async def annotate_dataset(
     # Quick stats
     annotated = sum(1 for d in dataset if d.get("expected_sources"))
     empty = sum(1 for d in dataset if d.get("expected_sources") == [])
-    avg_sources = (
-        sum(len(d.get("expected_sources", [])) for d in dataset) / total
-    )
-    print(f"  Annotated: {annotated}, Empty/OOS: {empty}, "
-          f"Avg sources per Q: {avg_sources:.1f}")
+    avg_sources = sum(len(d.get("expected_sources", [])) for d in dataset) / total
+    print(f"  Annotated: {annotated}, Empty/OOS: {empty}, Avg sources per Q: {avg_sources:.1f}")
 
 
 async def main() -> None:
@@ -204,15 +197,19 @@ async def main() -> None:
         description="Annotate golden dataset with ground-truth source patterns"
     )
     parser.add_argument(
-        "--model", default="gpt-4o-mini",
+        "--model",
+        default="gpt-4o-mini",
         help="OpenAI model for relevance judgments (default: gpt-4o-mini)",
     )
     parser.add_argument(
-        "--dry-run", action="store_true",
+        "--dry-run",
+        action="store_true",
         help="Print suggestions without writing to file",
     )
     parser.add_argument(
-        "--top-k", type=int, default=25,
+        "--top-k",
+        type=int,
+        default=25,
         help="Number of chunks to retrieve per question (default: 25)",
     )
     args = parser.parse_args()

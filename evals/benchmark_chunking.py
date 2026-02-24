@@ -102,6 +102,7 @@ STRATEGIES: list[ChunkingStrategy] = [
 # Scoring function – weighted combination of metrics
 # ---------------------------------------------------------------------------
 
+
 def compute_score(report: RetrievalReport) -> float:
     """Score a strategy.  Higher is better.
 
@@ -125,6 +126,7 @@ def compute_score(report: RetrievalReport) -> float:
 # ---------------------------------------------------------------------------
 # Main benchmark
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class BenchmarkRow:
@@ -168,27 +170,26 @@ async def run_benchmark(
         if skip_existing and result_path.exists():
             print(f"[{i}/{len(STRATEGIES)}] {strategy.name}: loading cached result")
             data = json.loads(result_path.read_text(encoding="utf-8"))
-            report = RetrievalReport(**{
-                k: v for k, v in data.items()
-                if k in RetrievalReport.__dataclass_fields__
-            })
+            report = RetrievalReport(
+                **{k: v for k, v in data.items() if k in RetrievalReport.__dataclass_fields__}
+            )
             score = compute_score(report)
             reports.append((strategy, report, score))
             continue
 
         print(f"\n{'─' * 70}")
         print(f"[{i}/{len(STRATEGIES)}] Strategy: {strategy.name}")
-        print(f"  mode={strategy.split_mode}  max={strategy.max_chars}  "
-              f"overlap={strategy.overlap_chars}  meta={strategy.prepend_metadata}")
+        print(
+            f"  mode={strategy.split_mode}  max={strategy.max_chars}  "
+            f"overlap={strategy.overlap_chars}  meta={strategy.prepend_metadata}"
+        )
         print(f"{'─' * 70}")
 
         t0 = time.time()
 
         # ── Ingest ────────────────────────────────────────────────────
         collection_name = f"eval_{strategy.name}"
-        eval_settings = settings.model_copy(
-            update={"CHROMA_COLLECTION_NAME": collection_name}
-        )
+        eval_settings = settings.model_copy(update={"CHROMA_COLLECTION_NAME": collection_name})
 
         pipeline = IngestionPipeline(eval_settings, chunking_strategy=strategy)
         chunks = await pipeline.run()
@@ -218,11 +219,13 @@ async def run_benchmark(
         elapsed = time.time() - t0
         score = compute_score(report)
 
-        print(f"  Recall@5={report.mean_recall_at_5:.0%}  "
-              f"Recall@10={report.mean_recall_at_10:.0%}  "
-              f"Recall@25={report.mean_recall_at_25:.0%}  "
-              f"HitRate={report.questions_with_match_in_top5:.0%}  "
-              f"MeanRank={report.mean_first_match_rank:.1f}")
+        print(
+            f"  Recall@5={report.mean_recall_at_5:.0%}  "
+            f"Recall@10={report.mean_recall_at_10:.0%}  "
+            f"Recall@25={report.mean_recall_at_25:.0%}  "
+            f"HitRate={report.questions_with_match_in_top5:.0%}  "
+            f"MeanRank={report.mean_first_match_rank:.1f}"
+        )
         print(f"  Score: {score:.3f}  ({elapsed:.1f}s)")
 
         # Save individual result
@@ -238,21 +241,23 @@ async def run_benchmark(
 
     rows: list[BenchmarkRow] = []
     for rank, (strat, rep, sc) in enumerate(reports, 1):
-        rows.append(BenchmarkRow(
-            rank=rank,
-            name=strat.name,
-            split_mode=strat.split_mode,
-            max_chars=strat.max_chars,
-            overlap=strat.overlap_chars,
-            meta=strat.prepend_metadata,
-            chunks=rep.chunk_count,
-            recall5=rep.mean_recall_at_5,
-            recall10=rep.mean_recall_at_10,
-            recall25=rep.mean_recall_at_25,
-            hit_rate=rep.questions_with_match_in_top5,
-            mean_rank=rep.mean_first_match_rank,
-            score=sc,
-        ))
+        rows.append(
+            BenchmarkRow(
+                rank=rank,
+                name=strat.name,
+                split_mode=strat.split_mode,
+                max_chars=strat.max_chars,
+                overlap=strat.overlap_chars,
+                meta=strat.prepend_metadata,
+                chunks=rep.chunk_count,
+                recall5=rep.mean_recall_at_5,
+                recall10=rep.mean_recall_at_10,
+                recall25=rep.mean_recall_at_25,
+                hit_rate=rep.questions_with_match_in_top5,
+                mean_rank=rep.mean_first_match_rank,
+                score=sc,
+            )
+        )
 
     print("\n\n" + "=" * 100)
     print("BENCHMARK RESULTS – RANKED BY COMPOSITE SCORE")
@@ -276,8 +281,10 @@ async def run_benchmark(
 
     winner_strat, winner_report, winner_score = reports[0]
     print(f"\n★ WINNER: {winner_strat.name} (score={winner_score:.3f})")
-    print(f"  split_mode=\"{winner_strat.split_mode}\", max_chars={winner_strat.max_chars}, "
-          f"overlap_chars={winner_strat.overlap_chars}, prepend_metadata={winner_strat.prepend_metadata}")
+    print(
+        f'  split_mode="{winner_strat.split_mode}", max_chars={winner_strat.max_chars}, '
+        f"overlap_chars={winner_strat.overlap_chars}, prepend_metadata={winner_strat.prepend_metadata}"
+    )
 
     # ── Save summary ──────────────────────────────────────────────────
     summary = {
@@ -316,16 +323,18 @@ def _apply_winner(winner: ChunkingStrategy) -> None:
     # Use a function replacement to avoid backreference interpretation issues
     def _make_replacer(value: str):
         """Return a callable that preserves the captured group and appends value."""
+
         def replacer(m: re.Match) -> str:
             return m.group(1) + value
+
         return replacer
 
     replacements: list[tuple[str, str]] = [
         (r'(name:\s*str\s*=\s*)"[^"]*"', f'"{winner.name}"'),
-        (r'(max_chars:\s*int\s*=\s*)\d+', str(winner.max_chars)),
-        (r'(overlap_chars:\s*int\s*=\s*)\d+', str(winner.overlap_chars)),
+        (r"(max_chars:\s*int\s*=\s*)\d+", str(winner.max_chars)),
+        (r"(overlap_chars:\s*int\s*=\s*)\d+", str(winner.overlap_chars)),
         (r'(split_mode:\s*Literal\[.*?\]\s*=\s*)"[^"]*"', f'"{winner.split_mode}"'),
-        (r'(prepend_metadata:\s*bool\s*=\s*)\w+', str(winner.prepend_metadata)),
+        (r"(prepend_metadata:\s*bool\s*=\s*)\w+", str(winner.prepend_metadata)),
     ]
 
     for pattern, value in replacements:
@@ -335,25 +344,30 @@ def _apply_winner(winner: ChunkingStrategy) -> None:
 
     models_path.write_text(content, encoding="utf-8")
     print(f"\n✅ Updated ChunkingStrategy defaults in {models_path}")
-    print(f"   name=\"{winner.name}\", split_mode=\"{winner.split_mode}\", "
-          f"max_chars={winner.max_chars}, overlap_chars={winner.overlap_chars}, "
-          f"prepend_metadata={winner.prepend_metadata}")
+    print(
+        f'   name="{winner.name}", split_mode="{winner.split_mode}", '
+        f"max_chars={winner.max_chars}, overlap_chars={winner.overlap_chars}, "
+        f"prepend_metadata={winner.prepend_metadata}"
+    )
 
 
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
+
 async def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(description="Benchmark chunking strategies")
     parser.add_argument(
-        "--skip-existing", action="store_true",
+        "--skip-existing",
+        action="store_true",
         help="Skip strategies with existing result files",
     )
     parser.add_argument(
-        "--apply-winner", action="store_true",
+        "--apply-winner",
+        action="store_true",
         help="Update ChunkingStrategy defaults to the winning strategy",
     )
     args = parser.parse_args()

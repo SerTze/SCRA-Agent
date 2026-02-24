@@ -68,9 +68,7 @@ class TestQueryEndpointSuccess:
             "fallback_active": False,
         }
 
-        with patch(
-            "src.presentation.api.build_workflow", return_value=mock_workflow
-        ):
+        with patch("src.presentation.api.build_workflow", return_value=mock_workflow):
             app = create_app(test_settings)
             client = TestClient(app)
             resp = client.post(
@@ -127,8 +125,7 @@ class TestStatsEndpoint:
 class TestQueryCacheIntegration:
     _WORKFLOW_RESULT = {
         "generation": (
-            "Article 5 prohibits AI systems [EUAI_Art5_Chunk0].\n\n"
-            "Sources:\n- [EUAI_Art5_Chunk0]"
+            "Article 5 prohibits AI systems [EUAI_Art5_Chunk0].\n\nSources:\n- [EUAI_Art5_Chunk0]"
         ),
         "cited_sources": ["EUAI_Art5_Chunk0"],
         "grounding_score": "grounded",

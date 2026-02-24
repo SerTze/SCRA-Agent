@@ -24,7 +24,7 @@ _EXEMPT_PATHS = {"/health", "/docs", "/openapi.json", "/redoc"}
 # Buckets idle for longer than this are evicted to prevent memory leaks
 # from bot/scan traffic with many unique IPs.
 _BUCKET_TTL_SECONDS = 600.0  # 10 minutes
-_EVICTION_INTERVAL = 60.0    # run eviction at most once per minute
+_EVICTION_INTERVAL = 60.0  # run eviction at most once per minute
 
 
 class _TokenBucket:
@@ -33,8 +33,8 @@ class _TokenBucket:
     __slots__ = ("rate", "burst", "tokens", "last_refill")
 
     def __init__(self, rate: float, burst: int) -> None:
-        self.rate = rate          # tokens per second
-        self.burst = burst        # max tokens
+        self.rate = rate  # tokens per second
+        self.burst = burst  # max tokens
         self.tokens = float(burst)
         self.last_refill = time.monotonic()
 
@@ -75,7 +75,7 @@ class RateLimitMiddleware:
         burst: int = 10,
     ) -> None:
         self.app = app
-        self._rate = requests_per_minute / 60.0   # convert to per-second
+        self._rate = requests_per_minute / 60.0  # convert to per-second
         self._burst = burst
         self._buckets: dict[str, _TokenBucket] = {}
         self._last_eviction = time.monotonic()
@@ -118,18 +118,22 @@ class RateLimitMiddleware:
 
         # Rate limited – send 429
         logger.warning("Rate limit exceeded for %s on %s", client_ip, path)
-        body = json.dumps({
-            "detail": "Rate limit exceeded. Please slow down.",
-        }).encode()
-        await send({
-            "type": "http.response.start",
-            "status": 429,
-            "headers": [
-                (b"content-type", b"application/json"),
-                (b"retry-after", b"2"),
-                (b"content-length", str(len(body)).encode()),
-            ],
-        })
+        body = json.dumps(
+            {
+                "detail": "Rate limit exceeded. Please slow down.",
+            }
+        ).encode()
+        await send(
+            {
+                "type": "http.response.start",
+                "status": 429,
+                "headers": [
+                    (b"content-type", b"application/json"),
+                    (b"retry-after", b"2"),
+                    (b"content-length", str(len(body)).encode()),
+                ],
+            }
+        )
         await send({"type": "http.response.body", "body": body})
 
     def _maybe_evict(self) -> None:
@@ -139,8 +143,7 @@ class RateLimitMiddleware:
             return
         self._last_eviction = now
         stale = [
-            ip for ip, bucket in self._buckets.items()
-            if bucket.idle_seconds > _BUCKET_TTL_SECONDS
+            ip for ip, bucket in self._buckets.items() if bucket.idle_seconds > _BUCKET_TTL_SECONDS
         ]
         for ip in stale:
             del self._buckets[ip]

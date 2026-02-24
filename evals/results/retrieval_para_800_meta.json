@@ -1,0 +1,954 @@
+{
+  "timestamp": "2026-02-17T21:41:26Z",
+  "strategy_name": "para_800_meta",
+  "split_mode": "paragraph",
+  "max_chars": 800,
+  "overlap_chars": 150,
+  "prepend_metadata": true,
+  "chunk_count": 845,
+  "total_questions": 25,
+  "mean_recall_at_5": 0.3965277777777778,
+  "mean_recall_at_10": 0.5312748015873016,
+  "mean_recall_at_25": 0.7843501984126985,
+  "mean_first_match_rank": 1.8333333333333333,
+  "questions_with_match_in_top5": 0.9166666666666666,
+  "distinct_sources_retrieved": 256,
+  "results": [
+    {
+      "eval_id": "eval_001",
+      "question": "Is social scoring allowed under the EU AI Act?",
+      "topic": "prohibited_practices",
+      "expected_sources": [
+        "EUAI_Art5",
+        "EUAI_Rec31",
+        "EUAI_Rec63"
+      ],
+      "sources_found_in_top5": 1,
+      "sources_found_in_top10": 1,
+      "sources_found_in_top25": 1,
+      "total_expected": 3,
+      "total_retrieved": 25,
+      "first_match_rank": 3,
+      "top5_sources": [
+        "EUAI_AnnexVIII",
+        "EUAI_Art108",
+        "EUAI_Art81",
+        "EUAI_Rec31",
+        "EUAI_Rec62"
+      ],
+      "recall_at_5": 0.3333333333333333,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_25": 0.3333333333333333,
+      "found": [
+        "EUAI_Rec31"
+      ],
+      "missing": [
+        "EUAI_Art5",
+        "EUAI_Rec63"
+      ]
+    },
+    {
+      "eval_id": "eval_002",
+      "question": "What AI practices are explicitly prohibited under Article 5?",
+      "topic": "prohibited_practices",
+      "expected_sources": [
+        "EUAI_Art5",
+        "EUAI_Rec28"
+      ],
+      "sources_found_in_top5": 2,
+      "sources_found_in_top10": 2,
+      "sources_found_in_top25": 2,
+      "total_expected": 2,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art5",
+        "EUAI_Art53",
+        "EUAI_Art81",
+        "EUAI_Rec28",
+        "EUAI_Rec7"
+      ],
+      "recall_at_5": 1.0,
+      "recall_at_10": 1.0,
+      "recall_at_25": 1.0,
+      "found": [
+        "EUAI_Art5",
+        "EUAI_Rec28"
+      ],
+      "missing": []
+    },
+    {
+      "eval_id": "eval_003",
+      "question": "What are the requirements for high-risk AI systems?",
+      "topic": "high_risk",
+      "expected_sources": [
+        "EUAI_Art14",
+        "EUAI_Art15",
+        "EUAI_Art9",
+        "EUAI_Rec26",
+        "EUAI_Rec52",
+        "EUAI_Rec66",
+        "EUAI_Rec68",
+        "EUAI_Rec75"
+      ],
+      "sources_found_in_top5": 3,
+      "sources_found_in_top10": 4,
+      "sources_found_in_top25": 7,
+      "total_expected": 8,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art14",
+        "EUAI_Rec165",
+        "EUAI_Rec26",
+        "EUAI_Rec66",
+        "EUAI_Rec72"
+      ],
+      "recall_at_5": 0.375,
+      "recall_at_10": 0.5,
+      "recall_at_25": 0.875,
+      "found": [
+        "EUAI_Art14",
+        "EUAI_Art15",
+        "EUAI_Art9",
+        "EUAI_Rec26",
+        "EUAI_Rec52",
+        "EUAI_Rec66",
+        "EUAI_Rec75"
+      ],
+      "missing": [
+        "EUAI_Rec68"
+      ]
+    },
+    {
+      "eval_id": "eval_004",
+      "question": "What transparency obligations apply to AI systems that interact with humans?",
+      "topic": "transparency",
+      "expected_sources": [
+        "EUAI_Art13",
+        "EUAI_Art50",
+        "EUAI_Rec132",
+        "EUAI_Rec137",
+        "EUAI_Rec72"
+      ],
+      "sources_found_in_top5": 3,
+      "sources_found_in_top10": 4,
+      "sources_found_in_top25": 5,
+      "total_expected": 5,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art49",
+        "EUAI_Art50",
+        "EUAI_Rec132",
+        "EUAI_Rec137",
+        "EUAI_Rec27"
+      ],
+      "recall_at_5": 0.6,
+      "recall_at_10": 0.8,
+      "recall_at_25": 1.0,
+      "found": [
+        "EUAI_Art13",
+        "EUAI_Art50",
+        "EUAI_Rec132",
+        "EUAI_Rec137",
+        "EUAI_Rec72"
+      ],
+      "missing": []
+    },
+    {
+      "eval_id": "eval_005",
+      "question": "What are the penalties for non-compliance with the EU AI Act?",
+      "topic": "enforcement",
+      "expected_sources": [
+        "EUAI_Art100",
+        "EUAI_Art101",
+        "EUAI_Art99",
+        "EUAI_Rec169",
+        "EUAI_Rec68"
+      ],
+      "sources_found_in_top5": 2,
+      "sources_found_in_top10": 4,
+      "sources_found_in_top25": 4,
+      "total_expected": 5,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art100",
+        "EUAI_Art108",
+        "EUAI_Art81",
+        "EUAI_Art83",
+        "EUAI_Art99"
+      ],
+      "recall_at_5": 0.4,
+      "recall_at_10": 0.8,
+      "recall_at_25": 0.8,
+      "found": [
+        "EUAI_Art100",
+        "EUAI_Art101",
+        "EUAI_Art99",
+        "EUAI_Rec169"
+      ],
+      "missing": [
+        "EUAI_Rec68"
+      ]
+    },
+    {
+      "eval_id": "eval_006",
+      "question": "How does the EU AI Act define an AI system?",
+      "topic": "definitions",
+      "expected_sources": [
+        "EUAI_Art3",
+        "EUAI_Rec1"
+      ],
+      "sources_found_in_top5": 0,
+      "sources_found_in_top10": 1,
+      "sources_found_in_top25": 2,
+      "total_expected": 2,
+      "total_retrieved": 25,
+      "first_match_rank": 5,
+      "top5_sources": [
+        "EUAI_AnnexVIII",
+        "EUAI_Rec12",
+        "EUAI_Rec53",
+        "EUAI_Rec6",
+        "EUAI_Rec62"
+      ],
+      "recall_at_5": 0.0,
+      "recall_at_10": 0.5,
+      "recall_at_25": 1.0,
+      "found": [
+        "EUAI_Art3",
+        "EUAI_Rec1"
+      ],
+      "missing": []
+    },
+    {
+      "eval_id": "eval_007",
+      "question": "What role does the European AI Office play under the regulation?",
+      "topic": "governance",
+      "expected_sources": [
+        "EUAI_Art88",
+        "EUAI_Rec148",
+        "EUAI_Rec47"
+      ],
+      "sources_found_in_top5": 1,
+      "sources_found_in_top10": 2,
+      "sources_found_in_top25": 2,
+      "total_expected": 3,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art108",
+        "EUAI_Art58",
+        "EUAI_Rec1",
+        "EUAI_Rec148",
+        "EUAI_Rec49"
+      ],
+      "recall_at_5": 0.3333333333333333,
+      "recall_at_10": 0.6666666666666666,
+      "recall_at_25": 0.6666666666666666,
+      "found": [
+        "EUAI_Art88",
+        "EUAI_Rec148"
+      ],
+      "missing": [
+        "EUAI_Rec47"
+      ]
+    },
+    {
+      "eval_id": "eval_008",
+      "question": "Are biometric identification systems regulated under the AI Act?",
+      "topic": "biometrics",
+      "expected_sources": [
+        "EUAI_AnnexIII",
+        "EUAI_Art26",
+        "EUAI_Art5",
+        "EUAI_Rec14",
+        "EUAI_Rec15",
+        "EUAI_Rec17",
+        "EUAI_Rec32",
+        "EUAI_Rec35",
+        "EUAI_Rec38",
+        "EUAI_Rec39",
+        "EUAI_Rec40",
+        "EUAI_Rec41",
+        "EUAI_Rec54",
+        "EUAI_Rec68",
+        "EUAI_Rec94",
+        "EUAI_Rec95"
+      ],
+      "sources_found_in_top5": 4,
+      "sources_found_in_top10": 7,
+      "sources_found_in_top25": 11,
+      "total_expected": 16,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art26",
+        "EUAI_Art5",
+        "EUAI_Rec3",
+        "EUAI_Rec38",
+        "EUAI_Rec39"
+      ],
+      "recall_at_5": 0.25,
+      "recall_at_10": 0.4375,
+      "recall_at_25": 0.6875,
+      "found": [
+        "EUAI_AnnexIII",
+        "EUAI_Art26",
+        "EUAI_Art5",
+        "EUAI_Rec15",
+        "EUAI_Rec17",
+        "EUAI_Rec32",
+        "EUAI_Rec35",
+        "EUAI_Rec38",
+        "EUAI_Rec39",
+        "EUAI_Rec54",
+        "EUAI_Rec94"
+      ],
+      "missing": [
+        "EUAI_Rec14",
+        "EUAI_Rec40",
+        "EUAI_Rec41",
+        "EUAI_Rec68",
+        "EUAI_Rec95"
+      ]
+    },
+    {
+      "eval_id": "eval_009",
+      "question": "What obligations do providers of general-purpose AI models have?",
+      "topic": "gpai",
+      "expected_sources": [
+        "EUAI_Art53",
+        "EUAI_Art89",
+        "EUAI_Rec101",
+        "EUAI_Rec109",
+        "EUAI_Rec68",
+        "EUAI_Rec85",
+        "EUAI_Rec97"
+      ],
+      "sources_found_in_top5": 2,
+      "sources_found_in_top10": 3,
+      "sources_found_in_top25": 6,
+      "total_expected": 7,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art53",
+        "EUAI_Art54",
+        "EUAI_Rec104",
+        "EUAI_Rec97"
+      ],
+      "recall_at_5": 0.2857142857142857,
+      "recall_at_10": 0.42857142857142855,
+      "recall_at_25": 0.8571428571428571,
+      "found": [
+        "EUAI_Art53",
+        "EUAI_Art89",
+        "EUAI_Rec101",
+        "EUAI_Rec109",
+        "EUAI_Rec85",
+        "EUAI_Rec97"
+      ],
+      "missing": [
+        "EUAI_Rec68"
+      ]
+    },
+    {
+      "eval_id": "eval_010",
+      "question": "When does the EU AI Act enter into force and what is the timeline for implementation?",
+      "topic": "timeline",
+      "expected_sources": [
+        "EUAI_Art113",
+        "EUAI_Rec179"
+      ],
+      "sources_found_in_top5": 1,
+      "sources_found_in_top10": 1,
+      "sources_found_in_top25": 2,
+      "total_expected": 2,
+      "total_retrieved": 25,
+      "first_match_rank": 3,
+      "top5_sources": [
+        "EUAI_Art108",
+        "EUAI_Art110",
+        "EUAI_Art112",
+        "EUAI_Rec179",
+        "EUAI_Rec49"
+      ],
+      "recall_at_5": 0.5,
+      "recall_at_10": 0.5,
+      "recall_at_25": 1.0,
+      "found": [
+        "EUAI_Art113",
+        "EUAI_Rec179"
+      ],
+      "missing": []
+    },
+    {
+      "eval_id": "eval_011",
+      "question": "Does the EU AI Act regulate AI systems used for credit scoring?",
+      "topic": "high_risk",
+      "expected_sources": [
+        "EUAI_AnnexIII",
+        "EUAI_Art6",
+        "EUAI_Rec1",
+        "EUAI_Rec131",
+        "EUAI_Rec85"
+      ],
+      "sources_found_in_top5": 0,
+      "sources_found_in_top10": 2,
+      "sources_found_in_top25": 5,
+      "total_expected": 5,
+      "total_retrieved": 25,
+      "first_match_rank": 7,
+      "top5_sources": [
+        "EUAI_Art108",
+        "EUAI_Art81",
+        "EUAI_Rec49",
+        "EUAI_Rec53",
+        "EUAI_Rec58"
+      ],
+      "recall_at_5": 0.0,
+      "recall_at_10": 0.4,
+      "recall_at_25": 1.0,
+      "found": [
+        "EUAI_AnnexIII",
+        "EUAI_Art6",
+        "EUAI_Rec1",
+        "EUAI_Rec131",
+        "EUAI_Rec85"
+      ],
+      "missing": []
+    },
+    {
+      "eval_id": "eval_012",
+      "question": "Compare the obligations of providers versus deployers of high-risk AI systems.",
+      "topic": "high_risk",
+      "expected_sources": [
+        "EUAI_Art16",
+        "EUAI_Art25",
+        "EUAI_Art26",
+        "EUAI_Rec68",
+        "EUAI_Rec91"
+      ],
+      "sources_found_in_top5": 2,
+      "sources_found_in_top10": 2,
+      "sources_found_in_top25": 4,
+      "total_expected": 5,
+      "total_retrieved": 25,
+      "first_match_rank": 3,
+      "top5_sources": [
+        "EUAI_Art25",
+        "EUAI_Art26",
+        "EUAI_Art49",
+        "EUAI_Rec65",
+        "EUAI_Rec85"
+      ],
+      "recall_at_5": 0.4,
+      "recall_at_10": 0.4,
+      "recall_at_25": 0.8,
+      "found": [
+        "EUAI_Art16",
+        "EUAI_Art25",
+        "EUAI_Art26",
+        "EUAI_Rec91"
+      ],
+      "missing": [
+        "EUAI_Rec68"
+      ]
+    },
+    {
+      "eval_id": "eval_013",
+      "question": "What does GDPR say about the right to erasure?",
+      "topic": "out_of_scope",
+      "expected_sources": [],
+      "sources_found_in_top5": 0,
+      "sources_found_in_top10": 0,
+      "sources_found_in_top25": 0,
+      "total_expected": 0,
+      "total_retrieved": 0,
+      "first_match_rank": 0,
+      "top5_sources": [],
+      "recall_at_5": 0.0,
+      "recall_at_10": 0.0,
+      "recall_at_25": 0.0,
+      "found": [],
+      "missing": []
+    },
+    {
+      "eval_id": "eval_014",
+      "question": "Is facial recognition always prohibited under the EU AI Act?",
+      "topic": "biometrics",
+      "expected_sources": [
+        "EUAI_Art5",
+        "EUAI_Art50",
+        "EUAI_Rec38",
+        "EUAI_Rec39",
+        "EUAI_Rec43",
+        "EUAI_Rec54",
+        "EUAI_Rec94"
+      ],
+      "sources_found_in_top5": 4,
+      "sources_found_in_top10": 5,
+      "sources_found_in_top25": 7,
+      "total_expected": 7,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art26",
+        "EUAI_Art50",
+        "EUAI_Rec43",
+        "EUAI_Rec54",
+        "EUAI_Rec94"
+      ],
+      "recall_at_5": 0.5714285714285714,
+      "recall_at_10": 0.7142857142857143,
+      "recall_at_25": 1.0,
+      "found": [
+        "EUAI_Art5",
+        "EUAI_Art50",
+        "EUAI_Rec38",
+        "EUAI_Rec39",
+        "EUAI_Rec43",
+        "EUAI_Rec54",
+        "EUAI_Rec94"
+      ],
+      "missing": []
+    },
+    {
+      "eval_id": "eval_015",
+      "question": "What documentation and technical requirements must providers of high-risk AI systems maintain?",
+      "topic": "high_risk",
+      "expected_sources": [
+        "EUAI_Art16",
+        "EUAI_Art17",
+        "EUAI_Art21",
+        "EUAI_Art8",
+        "EUAI_Rec65",
+        "EUAI_Rec66",
+        "EUAI_Rec71"
+      ],
+      "sources_found_in_top5": 3,
+      "sources_found_in_top10": 4,
+      "sources_found_in_top25": 7,
+      "total_expected": 7,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art49",
+        "EUAI_Rec165",
+        "EUAI_Rec65",
+        "EUAI_Rec66",
+        "EUAI_Rec71"
+      ],
+      "recall_at_5": 0.42857142857142855,
+      "recall_at_10": 0.5714285714285714,
+      "recall_at_25": 1.0,
+      "found": [
+        "EUAI_Art16",
+        "EUAI_Art17",
+        "EUAI_Art21",
+        "EUAI_Art8",
+        "EUAI_Rec65",
+        "EUAI_Rec66",
+        "EUAI_Rec71"
+      ],
+      "missing": []
+    },
+    {
+      "eval_id": "eval_016",
+      "question": "What are the data governance requirements for high-risk AI systems under the EU AI Act?",
+      "topic": "high_risk",
+      "expected_sources": [
+        "EUAI_Art10",
+        "EUAI_Art16",
+        "EUAI_Rec10",
+        "EUAI_Rec122",
+        "EUAI_Rec66",
+        "EUAI_Rec67"
+      ],
+      "sources_found_in_top5": 1,
+      "sources_found_in_top10": 1,
+      "sources_found_in_top25": 4,
+      "total_expected": 6,
+      "total_retrieved": 25,
+      "first_match_rank": 2,
+      "top5_sources": [
+        "EUAI_Art70",
+        "EUAI_Art71",
+        "EUAI_Rec122",
+        "EUAI_Rec131"
+      ],
+      "recall_at_5": 0.16666666666666666,
+      "recall_at_10": 0.16666666666666666,
+      "recall_at_25": 0.6666666666666666,
+      "found": [
+        "EUAI_Art10",
+        "EUAI_Art16",
+        "EUAI_Rec122",
+        "EUAI_Rec66"
+      ],
+      "missing": [
+        "EUAI_Rec10",
+        "EUAI_Rec67"
+      ]
+    },
+    {
+      "eval_id": "eval_017",
+      "question": "What is a regulatory sandbox under the EU AI Act and who can participate?",
+      "topic": "governance",
+      "expected_sources": [
+        "EUAI_Art57",
+        "EUAI_Art58",
+        "EUAI_Rec139",
+        "EUAI_Rec55",
+        "EUAI_Rec68"
+      ],
+      "sources_found_in_top5": 3,
+      "sources_found_in_top10": 3,
+      "sources_found_in_top25": 3,
+      "total_expected": 5,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art57",
+        "EUAI_Art58",
+        "EUAI_Rec138",
+        "EUAI_Rec139"
+      ],
+      "recall_at_5": 0.6,
+      "recall_at_10": 0.6,
+      "recall_at_25": 0.6,
+      "found": [
+        "EUAI_Art57",
+        "EUAI_Art58",
+        "EUAI_Rec139"
+      ],
+      "missing": [
+        "EUAI_Rec55",
+        "EUAI_Rec68"
+      ]
+    },
+    {
+      "eval_id": "eval_018",
+      "question": "How does the EU AI Act classify AI systems by risk level?",
+      "topic": "risk_classification",
+      "expected_sources": [
+        "EUAI_Art16",
+        "EUAI_Art49",
+        "EUAI_Art6",
+        "EUAI_Rec26",
+        "EUAI_Rec51",
+        "EUAI_Rec52",
+        "EUAI_Rec7"
+      ],
+      "sources_found_in_top5": 2,
+      "sources_found_in_top10": 3,
+      "sources_found_in_top25": 7,
+      "total_expected": 7,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art112",
+        "EUAI_Rec166",
+        "EUAI_Rec51",
+        "EUAI_Rec52",
+        "EUAI_Rec64"
+      ],
+      "recall_at_5": 0.2857142857142857,
+      "recall_at_10": 0.42857142857142855,
+      "recall_at_25": 1.0,
+      "found": [
+        "EUAI_Art16",
+        "EUAI_Art49",
+        "EUAI_Art6",
+        "EUAI_Rec26",
+        "EUAI_Rec51",
+        "EUAI_Rec52",
+        "EUAI_Rec7"
+      ],
+      "missing": []
+    },
+    {
+      "eval_id": "eval_019",
+      "question": "What systemic risk obligations apply to general-purpose AI models with high impact?",
+      "topic": "gpai",
+      "expected_sources": [
+        "EUAI_Art51",
+        "EUAI_Art52",
+        "EUAI_Art55",
+        "EUAI_Art93",
+        "EUAI_Rec110",
+        "EUAI_Rec111",
+        "EUAI_Rec112",
+        "EUAI_Rec114",
+        "EUAI_Rec65",
+        "EUAI_Rec97"
+      ],
+      "sources_found_in_top5": 4,
+      "sources_found_in_top10": 5,
+      "sources_found_in_top25": 9,
+      "total_expected": 10,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art55",
+        "EUAI_Rec110",
+        "EUAI_Rec111",
+        "EUAI_Rec112",
+        "EUAI_Rec116"
+      ],
+      "recall_at_5": 0.4,
+      "recall_at_10": 0.5,
+      "recall_at_25": 0.9,
+      "found": [
+        "EUAI_Art51",
+        "EUAI_Art52",
+        "EUAI_Art55",
+        "EUAI_Art93",
+        "EUAI_Rec110",
+        "EUAI_Rec111",
+        "EUAI_Rec112",
+        "EUAI_Rec114",
+        "EUAI_Rec97"
+      ],
+      "missing": [
+        "EUAI_Rec65"
+      ]
+    },
+    {
+      "eval_id": "eval_020",
+      "question": "Can AI systems be used in recruitment and hiring under the EU AI Act?",
+      "topic": "high_risk",
+      "expected_sources": [
+        "EUAI_AnnexIII",
+        "EUAI_Art49",
+        "EUAI_Art6",
+        "EUAI_Rec1",
+        "EUAI_Rec29",
+        "EUAI_Rec4"
+      ],
+      "sources_found_in_top5": 2,
+      "sources_found_in_top10": 3,
+      "sources_found_in_top25": 4,
+      "total_expected": 6,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_AnnexIII",
+        "EUAI_Art6",
+        "EUAI_Rec131",
+        "EUAI_Rec53",
+        "EUAI_Rec62"
+      ],
+      "recall_at_5": 0.3333333333333333,
+      "recall_at_10": 0.5,
+      "recall_at_25": 0.6666666666666666,
+      "found": [
+        "EUAI_AnnexIII",
+        "EUAI_Art49",
+        "EUAI_Art6",
+        "EUAI_Rec1"
+      ],
+      "missing": [
+        "EUAI_Rec29",
+        "EUAI_Rec4"
+      ]
+    },
+    {
+      "eval_id": "eval_021",
+      "question": "What are the human oversight requirements for high-risk AI systems?",
+      "topic": "high_risk",
+      "expected_sources": [
+        "EUAI_Art14",
+        "EUAI_Art26",
+        "EUAI_Rec68",
+        "EUAI_Rec73"
+      ],
+      "sources_found_in_top5": 3,
+      "sources_found_in_top10": 3,
+      "sources_found_in_top25": 3,
+      "total_expected": 4,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art13",
+        "EUAI_Art14",
+        "EUAI_Art26",
+        "EUAI_Rec73",
+        "EUAI_Rec85"
+      ],
+      "recall_at_5": 0.75,
+      "recall_at_10": 0.75,
+      "recall_at_25": 0.75,
+      "found": [
+        "EUAI_Art14",
+        "EUAI_Art26",
+        "EUAI_Rec73"
+      ],
+      "missing": [
+        "EUAI_Rec68"
+      ]
+    },
+    {
+      "eval_id": "eval_022",
+      "question": "How does the EU AI Act address emotion recognition systems?",
+      "topic": "prohibited_practices",
+      "expected_sources": [
+        "EUAI_Art5",
+        "EUAI_Art50",
+        "EUAI_Rec18",
+        "EUAI_Rec39",
+        "EUAI_Rec44",
+        "EUAI_Rec63",
+        "EUAI_Rec68"
+      ],
+      "sources_found_in_top5": 3,
+      "sources_found_in_top10": 3,
+      "sources_found_in_top25": 4,
+      "total_expected": 7,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_AnnexIII",
+        "EUAI_Art50",
+        "EUAI_Rec18",
+        "EUAI_Rec44"
+      ],
+      "recall_at_5": 0.42857142857142855,
+      "recall_at_10": 0.42857142857142855,
+      "recall_at_25": 0.5714285714285714,
+      "found": [
+        "EUAI_Art50",
+        "EUAI_Rec18",
+        "EUAI_Rec44",
+        "EUAI_Rec63"
+      ],
+      "missing": [
+        "EUAI_Art5",
+        "EUAI_Rec39",
+        "EUAI_Rec68"
+      ]
+    },
+    {
+      "eval_id": "eval_023",
+      "question": "What conformity assessment procedures must high-risk AI systems undergo?",
+      "topic": "high_risk",
+      "expected_sources": [
+        "EUAI_AnnexVI",
+        "EUAI_Art17",
+        "EUAI_Art43",
+        "EUAI_Rec123",
+        "EUAI_Rec125",
+        "EUAI_Rec173",
+        "EUAI_Rec20",
+        "EUAI_Rec68"
+      ],
+      "sources_found_in_top5": 3,
+      "sources_found_in_top10": 5,
+      "sources_found_in_top25": 6,
+      "total_expected": 8,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art42",
+        "EUAI_Rec123",
+        "EUAI_Rec125",
+        "EUAI_Rec173",
+        "EUAI_Rec26"
+      ],
+      "recall_at_5": 0.375,
+      "recall_at_10": 0.625,
+      "recall_at_25": 0.75,
+      "found": [
+        "EUAI_AnnexVI",
+        "EUAI_Art17",
+        "EUAI_Art43",
+        "EUAI_Rec123",
+        "EUAI_Rec125",
+        "EUAI_Rec173"
+      ],
+      "missing": [
+        "EUAI_Rec20",
+        "EUAI_Rec68"
+      ]
+    },
+    {
+      "eval_id": "eval_024",
+      "question": "What is the role of national competent authorities under the EU AI Act?",
+      "topic": "governance",
+      "expected_sources": [
+        "EUAI_Art3",
+        "EUAI_Art57",
+        "EUAI_Art65",
+        "EUAI_Art70",
+        "EUAI_Rec48",
+        "EUAI_Rec68"
+      ],
+      "sources_found_in_top5": 3,
+      "sources_found_in_top10": 3,
+      "sources_found_in_top25": 3,
+      "total_expected": 6,
+      "total_retrieved": 25,
+      "first_match_rank": 1,
+      "top5_sources": [
+        "EUAI_Art22",
+        "EUAI_Art57",
+        "EUAI_Art65",
+        "EUAI_Art70",
+        "EUAI_Rec49"
+      ],
+      "recall_at_5": 0.5,
+      "recall_at_10": 0.5,
+      "recall_at_25": 0.5,
+      "found": [
+        "EUAI_Art57",
+        "EUAI_Art65",
+        "EUAI_Art70"
+      ],
+      "missing": [
+        "EUAI_Art3",
+        "EUAI_Rec48",
+        "EUAI_Rec68"
+      ]
+    },
+    {
+      "eval_id": "eval_025",
+      "question": "Does the EU AI Act apply to AI systems developed outside the European Union?",
+      "topic": "scope",
+      "expected_sources": [
+        "EUAI_Art2",
+        "EUAI_Rec1",
+        "EUAI_Rec180",
+        "EUAI_Rec3",
+        "EUAI_Rec7"
+      ],
+      "sources_found_in_top5": 1,
+      "sources_found_in_top10": 1,
+      "sources_found_in_top25": 2,
+      "total_expected": 5,
+      "total_retrieved": 25,
+      "first_match_rank": 4,
+      "top5_sources": [
+        "EUAI_AnnexVIII",
+        "EUAI_Art108",
+        "EUAI_Rec1",
+        "EUAI_Rec53",
+        "EUAI_Rec6"
+      ],
+      "recall_at_5": 0.2,
+      "recall_at_10": 0.2,
+      "recall_at_25": 0.4,
+      "found": [
+        "EUAI_Art2",
+        "EUAI_Rec1"
+      ],
+      "missing": [
+        "EUAI_Rec180",
+        "EUAI_Rec3",
+        "EUAI_Rec7"
+      ]
+    }
+  ]
+}

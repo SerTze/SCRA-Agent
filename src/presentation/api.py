@@ -148,13 +148,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     # -- Ingestion state tracking (bounded: entries expire after 1 hour) --
     _ingest_status: dict[str, dict] = {}
     _INGEST_STATUS_TTL = 3600.0  # 1 hour
-    _INGEST_STATUS_MAX = 1000    # hard cap on tracked tasks
+    _INGEST_STATUS_MAX = 1000  # hard cap on tracked tasks
 
     def _cleanup_ingest_status() -> None:
         """Remove completed/failed entries older than TTL to prevent memory leaks."""
         now = time.time()
         stale = [
-            tid for tid, info in _ingest_status.items()
+            tid
+            for tid, info in _ingest_status.items()
             if info.get("status") != "running"
             and now - info.get("_created", 0) > _INGEST_STATUS_TTL
         ]

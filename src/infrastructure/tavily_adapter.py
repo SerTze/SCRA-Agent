@@ -27,8 +27,7 @@ class TavilyAdapter:
     def __init__(self, settings: Settings) -> None:
         if not settings.TAVILY_API_KEY:
             raise AdapterError(
-                "TAVILY_API_KEY is not configured. "
-                "Set it in .env or as an environment variable."
+                "TAVILY_API_KEY is not configured. Set it in .env or as an environment variable."
             )
         self._client = AsyncTavilyClient(api_key=settings.TAVILY_API_KEY)
 
@@ -51,9 +50,7 @@ class TavilyAdapter:
         before_sleep=before_sleep_log(logger, logging.WARNING),
         reraise=True,
     )
-    async def _search_with_retry(
-        self, query: str, max_results: int
-    ) -> list[EvidenceChunk]:
+    async def _search_with_retry(self, query: str, max_results: int) -> list[EvidenceChunk]:
         """Invoke Tavily search with exponential backoff retry."""
         response = await self._client.search(
             query=query,

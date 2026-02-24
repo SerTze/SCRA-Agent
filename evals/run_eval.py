@@ -53,9 +53,11 @@ from src.domain.models import CITATION_PATTERN
 # Data classes
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class QuestionResult:
     """Evaluation result for a single question."""
+
     eval_id: str
     question: str
     topic: str
@@ -79,6 +81,7 @@ class QuestionResult:
 @dataclass
 class EvalReport:
     """Aggregate evaluation report."""
+
     timestamp: str = ""
     model: str = ""
     total_questions: int = 0
@@ -99,6 +102,7 @@ class EvalReport:
 # ---------------------------------------------------------------------------
 # Scoring functions
 # ---------------------------------------------------------------------------
+
 
 def score_relevance(answer: str, expected_keywords: list[str]) -> float:
     """Fraction of expected keywords found in the answer (case-insensitive)."""
@@ -141,6 +145,7 @@ def check_citation_source(sources: list[str], expected_pattern: str) -> bool:
 # ---------------------------------------------------------------------------
 # Query runner
 # ---------------------------------------------------------------------------
+
 
 async def run_single_eval(
     client: httpx.AsyncClient,
@@ -256,9 +261,7 @@ async def run_evaluation(
 
     # Pass = grounded + compliant + relevance > 50%
     passing = sum(
-        1
-        for r in valid
-        if r.grounding_pass and r.compliance_pass and r.answer_relevance > 0.5
+        1 for r in valid if r.grounding_pass and r.compliance_pass and r.answer_relevance > 0.5
     )
     report.pass_rate = passing / nv
 
@@ -271,28 +274,27 @@ async def run_evaluation(
 # CLI
 # ---------------------------------------------------------------------------
 
+
 async def main() -> None:
     parser = argparse.ArgumentParser(description="SCRA Evaluation Harness")
-    parser.add_argument(
-        "--url", default="http://localhost:8000", help="Base URL of the SCRA API"
-    )
+    parser.add_argument("--url", default="http://localhost:8000", help="Base URL of the SCRA API")
     parser.add_argument(
         "--dataset", default="evals/golden_dataset.json", help="Path to golden dataset"
     )
+    parser.add_argument("--output", default=None, help="Save results to JSON file")
+    parser.add_argument("--model", default="unknown", help="Model name for report labeling")
     parser.add_argument(
-        "--output", default=None, help="Save results to JSON file"
-    )
-    parser.add_argument(
-        "--model", default="unknown", help="Model name for report labeling"
-    )
-    parser.add_argument(
-        "--delay", type=float, default=8.0,
+        "--delay",
+        type=float,
+        default=8.0,
         help="Seconds between requests to respect upstream rate-limits (default: 8)",
     )
     args = parser.parse_args()
 
     report = await run_evaluation(
-        base_url=args.url, dataset_path=args.dataset, model=args.model,
+        base_url=args.url,
+        dataset_path=args.dataset,
+        model=args.model,
         delay=args.delay,
     )
 
